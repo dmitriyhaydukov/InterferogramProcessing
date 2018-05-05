@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="ExtraControls.ExtraImagesViewerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:extraControls="clr-namespace:ExtraControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="164" d:DesignWidth="295">
+    <Grid>
+
+        <ListBox x:Name="imagesListBox"
+                 SelectionChanged="imagesListBoxSelectionChanged"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 SelectionMode="Extended"
+                 KeyUp="ImagesListBox_KeyUp">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel  x:Name="imagesPanel"
+                                IsItemsHost="True" Orientation="Vertical">
+                    </WrapPanel>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                    <extraControls:ExtraImageControl Source="{Binding Path=ImageSource}"
+                                                     Text="{Binding Path=ImageName}"
+                                                     Checked="{Binding Path=Checked, Mode=TwoWay}"
+                                                     CheckedVisibility="Collapsed"
+                                                     Margin="5"
+                                                     IsHitTestVisible="False">
+                        </extraControls:ExtraImageControl>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+    </Grid>
+</UserControl>

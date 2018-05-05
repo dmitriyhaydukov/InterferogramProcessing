@@ -1,0 +1,11 @@
+﻿<Window x:Class="UserInterfaceHelping.ZedGraphWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:extraControls="clr-namespace:ExtraControls;assembly=ExtraControls"
+        Title="GraphWindow" Height="300" Width="300">
+    <Grid>
+        <extraControls:ZedGraphChartControl x:Name="chartControl">
+            
+        </extraControls:ZedGraphChartControl>
+    </Grid>
+</Window>

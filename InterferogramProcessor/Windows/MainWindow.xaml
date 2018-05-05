@@ -1,0 +1,476 @@
+﻿<Window x:Class="InterferogramProcessing.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:extraControls="clr-namespace:ExtraControls;assembly=ExtraControls"
+        xmlns:extraSystemHelping="clr-namespace:ExtraSystemHelping;assembly=ExtraSystemHelping"
+        xmlns:wpfExtensions="clr-namespace:WPFExtensions.Controls;assembly=WPFExtensions"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:InterferogramProcessing"
+        Title="Обработка интерферограмм" Height="346" Width="1051" WindowState="Maximized">
+    <Window.Resources>
+        <ObjectDataProvider x:Key="decodingAlgorithmEnum" MethodName="GetValues"
+                            ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:DecodingAlgorithm"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="imagesViewingModeEnum" MethodName="GetValues"
+                            ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:ImagesViewingMode"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <DockPanel DockPanel.Dock="Top">
+                <Menu x:Name="mainMenu" DockPanel.Dock="Top">
+                    <MenuItem Header="Изображение">
+                        <MenuItem Header="Загрузить изображения" Command="{Binding Path=ImagesViewModel.LoadImagesCommand}"></MenuItem>
+                        <MenuItem Header="Загрузить изображение шаблона" Command="{Binding Path=LoadStencilImageCommand}"></MenuItem>
+                        <MenuItem Header="Сохранить изображения" Command="{Binding Path=ImagesViewModel.SaveImagesCommand}"></MenuItem>
+                        <MenuItem Header="Удалить изображения" Command="{Binding Path=ImagesViewModel.DeleteImagesCommand}"></MenuItem>
+                        <MenuItem Header="Показать изображение в отдельном окне" Command="{Binding Path=ShowMainImageInWindowCommand}"></MenuItem>
+                        <MenuItem Header="Генерация интерференционных картин" Command="{Binding Path=GenerateImagesCommand}"></MenuItem>
+                        <MenuItem Header="Получить фазовое поле" Command="{Binding Path=GetPhaseImageCommand}"></MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="Обработка">
+                        <MenuItem Header="Гамма коррекция" Command="{Binding Path=GammaCorrectionCommand}" Visibility="Collapsed"></MenuItem>
+                        <MenuItem Header="График последней автоматической гамма-коррекции" Command="{Binding Path=ShowAutoGammaCorrectionGraphCommand}" Visibility="Collapsed"></MenuItem>
+                        <MenuItem Header="Преобразовать в полутоновые изображения" Command="{Binding Path=TransformImagesToGrayScaleImagesCommand}"></MenuItem>
+                        <MenuItem Header="Нормализовать изображения" Command="{Binding Path=NormalizeImagesCommand}"></MenuItem>
+                        
+                        <MenuItem Header="Фильтровать интерференционные картины по средней интенсивности" Visibility="Collapsed"
+                                  Command="{Binding Path=GetFelteredAverageIntensitiesInterferogramsCommand}"
+                                  CommandParameter="{Binding ElementName=windowSizeTextBox, Path=Text}">
+                        </MenuItem>
+
+                        <MenuItem Header="Обрезать края изображений"
+                                  Command="{Binding Path=CropImagesBoundsCommand}"
+                                  CommandParameter="{Binding ElementName=windowSizeTextBox, Path=Text}">
+                        </MenuItem>
+                        
+                        <MenuItem Header="Обработать усредняющим фильтром"
+                                  Command="{Binding Path=FilterImagesByMaskCommand}"
+                                  CommandParameter="{Binding ElementName=windowSizeTextBox, Path=Text}">
+                        </MenuItem>
+
+                        <MenuItem Header="Вычитание изображений"
+                                  Command="{Binding Path=SubstractImagesCommand}"
+                                  CommandParameter="{Binding ElementName=coefficientsTextBox, Path=Text}">
+                        </MenuItem>
+
+                        <MenuItem Header="Вычитание изображений (улучшенное)" Visibility="Collapsed"
+                                  Command="{Binding Path=AdvancedImagesSubstractingCommand}">
+                        </MenuItem>
+                        
+                        <MenuItem Header="Получить спектр преобразования Фурье"
+                                  Command="{Binding Path=GetFourierTransformSpectrumCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Получить обратное преобразование Фурье"
+                                  Command="{Binding Path=GetInverseFourierTransformCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Обрезать изображения до размера 2^N"
+                                  Command="{Binding Path=CropImagesToSizeAtPowerOfTwoCommand}">
+                        </MenuItem>
+             
+
+                        <MenuItem Header="Фильтровать преобразование Фурье удалением области"
+                                  Command="{Binding Path=FilterFourierTransformByRemovingCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Фильтровать преобразование Фурье выделением области"
+                                  Command="{Binding Path=FilterFourierTransformBySelectingCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Получить спектры преобразования Фурье"
+                                  Command="{Binding Path=GetFourierTransformSpectrumsCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Фильтровать преобразование Фурье выделением области"
+                                  Command="{Binding Path=FilterFourierTransformsBySelectingCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Получить обратные преобразования Фурье"
+                                  Command="{Binding Path=GetInverseFourierTransformsCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Получить преобразование Фурье для текущего графика"
+                                  Command="{Binding Path=GetFourierTransformForCurrentGraphCommand}">
+                        </MenuItem>
+                        
+                        <MenuItem Header="Получить обратное преобразование Фурье для текущего графика"
+                                  Command="{Binding Path=GetInverseFourierTransformForCurrentGraphCommand}">
+                        </MenuItem>
+
+
+                        <MenuItem Header="Фильтровать изображения сглаживанием с шагом"
+                                  Command="{Binding Path=FilterImagesByStepCommand}"
+                                  CommandParameter="{Binding ElementName=windowSizeTextBox, Path=Text}">
+                        </MenuItem>
+
+                        <MenuItem Header="Вычесть фазы"
+                                  Command="{Binding Path=SubstractPhasesCommand}">
+                        </MenuItem>
+                        
+                        <MenuItem Header="Вычислить фазовые сдвиги"
+                                  Command="{Binding Path=CalculatePhaseShiftsCommand}">
+                        </MenuItem>
+                        
+                        <MenuItem Header="Вычисление фазовых сдвигов (отобразить эллипс)"
+                                  Command="{Binding Path=ShowPhaseShiftsCalculatingEllipsePointsCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Гамма коррекция - циклический сдвиг"
+                                  Command="{Binding Path=GammaCorrectionByCyclingShiftCommand}"
+                                  Visibility="Collapsed">
+                        </MenuItem>
+                        
+                        <MenuItem Header="Филтр по максимальному значению спектра"
+                                  Command="{Binding Path=FilterByMaxSpectrumValueCommand}">
+                        </MenuItem>
+    
+
+                        <MenuItem Header="Коррекция к синусоиде"
+                                  Command="{Binding Path=CorrectImagesToSinusoidalFunctionCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Заливка"
+                                  Command="{Binding Path=FillRegionCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Расширить изображение"
+                                  Command="{Binding Path=ExtendImageCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Дилатация"
+                                  Command="{Binding Path=DilatateImageCommand}">
+                        </MenuItem>
+
+                    </MenuItem>
+                    
+                    <MenuItem Header="Расшифровка">
+                        <MenuItem Header="Расшифровать" Command="{Binding Path=DecodeCommand}"></MenuItem>
+                        <MenuItem Header="Отобразить график Числители - Знаменатели"
+                                  Command="{Binding Path=ShowNumeratorsDenominatorsGraphCommand}"
+                                  Visibility="Collapsed">
+                            
+                        </MenuItem>
+
+                        <MenuItem Header="Алгоитм расшифровки описанием цилиндра (Отобразить информацию)"
+                                  Command="{Binding Path=ShowCylinderDecodingAlgorithmInfoCommand}">
+                            
+                        </MenuItem>
+
+                        <MenuItem Header="Развернуть последнее вычисленное фазовое поле по строкам"
+                                  Command="{Binding Path=UnwrapLastPhaseMatrixByRowsCommand}">
+
+                        </MenuItem>
+
+                        <MenuItem Header="Развернуть фазовое поле по строкам"
+                                  Command="{Binding Path=UnwrapPhaseMatrixByRowsCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Развернуть фазовое поле по столбцам"
+                                  Command="{Binding Path=UnwrapPhaseMatrixByColumnsCommand}">
+                        </MenuItem>
+                        
+                        
+                        
+                        <MenuItem Header="Инвертрировать фазовое поле"
+                                  Command="{Binding Path=GetInversePhaseCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Показать интенсивности для точки"
+                                  Command="{Binding Path=ShowIntensitiesForPointCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Установить изображение как шаблон развертывания"
+                                  Command="{Binding Path=SetLeftMainImageAsUnwrappingTemplateImageCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Установить номер цвета"
+                                  Command="{Binding Path=SetColorNumberCommand}">
+                        </MenuItem>
+                        
+
+                        <MenuItem Header="Развернуть фазовое поле по шаблону"
+                                  Command="{Binding Path=UnwrapPhaseMatrixByTemplateImageCommand}">
+                        </MenuItem>
+
+                    </MenuItem>
+                    <MenuItem Header="Трехмерный график">
+                        <MenuItem Header="Отобразить траекторию интенсивностей в пространстве" Command="{Binding Path=ShowIntensitiesTrajectoryInSpaceCommand}"></MenuItem>
+
+                        <MenuItem Header="Отобразить траекторию интенсивностей в пространстве с аппроксимирующей плоскостью"
+                                  Command="{Binding Path=ShowIntensitiesTrajectoryWithApproximatedPlaneInSpaceCommand}">
+                            
+                        </MenuItem>
+                        
+                        <MenuItem Header="Отобразить тректорию интенсивнотей для строки"
+                                  Command="{Binding Path=ShowRowIntensitiesTrajectoryInSpaceCommand}"
+                                  CommandParameter="{Binding ElementName=rowNumberTextBox, Path=Text}">
+                            
+                        </MenuItem>
+
+                        <MenuItem Header="Отобразить график для изображения Matlab"
+                                  Command="{Binding Path=ShowMatlabGraph3DCommand}">
+                        </MenuItem>
+
+
+                        <MenuItem Header="Отобразить график для фазвого поля Matlab"
+                                  Command="{Binding Path=ShowPhaseMatrixMatlabGraph3DCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Show Pair Last Points In Space" Command="{Binding Path=ShowPairLastPointsInSpaceCommand}" Visibility="Collapsed"></MenuItem>
+
+                        
+
+
+                    </MenuItem>
+                    <MenuItem Header="Приложение">
+                        <MenuItem Header="Сохранить изображение графика в файл"
+                                  Command="{Binding Path=SaveGraphControlImageToFileCommand}"
+                                  CommandParameter="{Binding ElementName=mainChartConrol}">
+                            
+                        </MenuItem>
+
+                        <MenuItem Header="Отобразить разность графиков"
+                                  Command="{Binding Path=ShowSubstractGraphCommand}">
+                                  
+                        </MenuItem>
+                        
+                        <MenuItem Header="Отобразить графики для выделенных изображений"
+                                  Command="{Binding Path=ShowGraphsForSelectedImagesCommand}"
+                                  CommandParameter="{Binding ElementName=rowNumberTextBox, Path=Text}">
+                             
+                        </MenuItem>
+
+                        <MenuItem Header="Тест" 
+                                  Command="{Binding Path=TestCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Вычислить среднеквадратическую ошибку для графиков"
+                                  Command="{Binding Path=CalculateRootMeanSquareErrorForGraphsCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Вычислить среднеквадратическую ошибку для фазовых полей"
+                                  Command="{Binding Path=CalculateRootMeanSquareErrorForMatricesCommand}">
+                        </MenuItem>
+
+                        <MenuItem x:Name="SetAxisY_Name_Intensity" Header="Ось Y - 'Интнсивность'"
+                                  Click="SetAxisY_Name_Intensity_Click" Visibility="Collapsed">
+                                  
+                        </MenuItem>
+
+                        <MenuItem x:Name="SetAxisY_Name_Phase" Header="Ось Y - 'Фаза'"
+                                  Click="SetAxisY_Name_Phase_Click" Visibility="Collapsed">
+
+                        </MenuItem>
+
+                        <MenuItem Header="Генерация импульсов"
+                                  Command="{Binding Path=GenerateRectanglePulsesCommand}">
+                        </MenuItem>
+
+                    </MenuItem>
+                    
+                </Menu>
+                <Border BorderThickness="1" BorderBrush="Black">
+                    <StackPanel x:Name="controlPanel" DockPanel.Dock="Bottom" Orientation="Horizontal">
+                        <Button Content="Camera" Margin="5" Command="{Binding Path=CameraManagementCommand}" Visibility="Visible"></Button>
+                        <Button Content="Motor" Margin="5" Command="{Binding Path=MotorManagementCommand}" Visibility="Visible"></Button>
+                        <Label Margin="5">Алгритм расшифровки</Label>
+                        <ComboBox x:Name="decodingAlgorithmComboBox" Margin="5"
+                                  ItemsSource="{Binding Source={StaticResource decodingAlgorithmEnum}}"
+                                  SelectedItem="{Binding Path=DecodingAlgorithm}">
+                            
+                        </ComboBox>
+                        <Button Content=" R --> List " Margin="5"
+                                Command="{Binding Path=AddRightImageToImagesListCommand}">
+                        </Button>
+                        <Button Content=" L --> R " Margin="5"
+                                Command="{Binding Path=LeftImageToRightImageCommand}">
+                            
+                        </Button>
+                        
+                        <Label Content="x:" Margin="5"></Label>
+                        <Label x:Name="imageCoordinateX" Margin="5"></Label>
+                        <Label Content="y:" Margin="5"></Label>
+                        <Label x:Name="imageCoordinateY" Margin="5"></Label>
+                        
+                        <Label Content="Просмотр графика" Margin="5"></Label>
+                        <ComboBox x:Name="imagesViewingModeComboBox" Margin="5"
+                                  ItemsSource="{Binding Source={StaticResource imagesViewingModeEnum}}"
+                                  SelectedItem="{Binding Path=ImagesViewingMode}">
+                        
+                        </ComboBox>
+                        
+
+                        <CheckBox x:Name="useStencilImage" VerticalAlignment="Center"
+                                  Margin="5"
+                                  IsChecked="{Binding Path=UseStencilImage, Mode=TwoWay}">
+                        </CheckBox>
+                        <Label Content="Использовать изображение шаблона" Margin="5"></Label>
+                        
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <GridSplitter Grid.Column="1" Width="5"
+                              VerticalAlignment="Stretch"
+                              HorizontalAlignment="Center">
+                </GridSplitter>
+                <DockPanel LastChildFill="True">
+                    
+                    <DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
+                        <Label HorizontalAlignment="Center" DockPanel.Dock="Top" Content="Изображение шаблона">
+                            
+                        </Label>
+                        <extraControls:ExtraImageControl    x:Name="stencilImage"
+                                                            TextVisibility="Collapsed"
+                                                            CheckedVisibility="Collapsed"
+                                                            ImageSizeVisibility="Collapsed"
+                                                            Source="{Binding Path=StencilImage}"
+                                                            Margin="5">
+                        </extraControls:ExtraImageControl>
+                    </DockPanel>
+                    <extraControls:ExtraImagesViewerControl x:Name="mainImagesViewerControl"
+                                                            Grid.Column="0"
+                                                            ImageInfoCollection="{Binding Path=ImagesViewModel.ImageInfoCollection}"
+                                                            SelectedImageInfoCollection="{Binding Path=ImagesViewModel.SelectedImageInfoCollection, Mode=TwoWay}"
+                                                            SelectedImageChanged="mainImagesViewerControl_SelectedImageChanged"
+                                                            KeyUp="MainImagesViewerControl_KeyUp">
+                    </extraControls:ExtraImagesViewerControl>
+                </DockPanel>
+                <Grid Grid.Column="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <GridSplitter   Grid.Row="1" Height="5"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Stretch">
+                    </GridSplitter>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        
+                        <GridSplitter   Grid.Column="1" Width="5"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalAlignment="Center">
+                        </GridSplitter>
+                        
+                        <wpfExtensions:ZoomControl x:Name="leftZoomControl" Grid.Column="0">
+                            <Image  x:Name="mainLeftImage"
+                                        Source="{Binding Path=MainLeftImage}"
+                                        Stretch="None"
+                                        MouseMove="mainLeftImage_MouseMove"
+                                        MouseDown="mainLeftImage_MouseDown">
+                            </Image>
+                        </wpfExtensions:ZoomControl>
+                        
+                        <wpfExtensions:ZoomControl x:Name="rightZoomControl" Grid.Column="2">
+                            <Image  x:Name="mainRightImage"
+                                        Source="{Binding Path=MainRightImage}"
+                                        Stretch="None"
+                                        MouseMove="mainRightImage_MouseMove"
+                                        MouseDown="mainRightImage_MouseDown">
+                            </Image>
+                        </wpfExtensions:ZoomControl>
+                    </Grid>
+                    
+                    <DockPanel Grid.Row="2" LastChildFill="True">
+                        <StackPanel DockPanel.Dock="Top"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Center" Height="34">
+                            <StackPanel.Resources>
+                                <extraSystemHelping:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+                                
+                            </StackPanel.Resources>
+
+                            <Label Content="Коэффициенты:"></Label>
+                            <TextBox x:Name="coefficientsTextBox" Margin="2" Width="60" TextChanged="coefficientsTextBox_TextChanged"></TextBox>
+
+                            <Label Content="Размер окна:"></Label>
+                            <TextBox x:Name="windowSizeTextBox" Margin="2" Width="40"></TextBox>
+                            
+                            <Label Content="Номер строки:" Margin="2">
+                                
+                            </Label>
+                            <TextBox x:Name="rowNumberTextBox" Margin="2" Width="40">
+                                
+                            </TextBox>
+                            <Button x:Name="rowNumberButtonOK" Content="OK" Margin="2"
+                                    Click="RowNumberButtonOK_Click">
+                                
+                            </Button>
+                            
+                            
+                            <RadioButton x:Name="graphGrayScaleMode"
+                                         GroupName="GraphShowing"
+                                         Margin="5"
+                                         IsChecked="{Binding Path=GraphShowingMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static local:GraphShowingMode.GrayScale}, Mode=TwoWay}"
+                                         Checked="GraphGrayScaleMode_Checked"
+                                         Content="Gray Scale">
+                                
+                            </RadioButton>
+                            <RadioButton x:Name="graphRedMode"
+                                         GroupName="GraphShowing"
+                                         Margin="5"
+                                         IsChecked="{Binding Path=GraphShowingMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static local:GraphShowingMode.Red}, Mode=TwoWay}"
+                                         Checked="GraphRedMode_Checked"
+                                         Content="Red">
+                                
+                            </RadioButton>
+                            <RadioButton x:Name="graphGreenMode"
+                                         GroupName="GraphShowing"
+                                         Margin="5"
+                                         IsChecked="{Binding Path=GraphShowingMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static local:GraphShowingMode.Green}, Mode=TwoWay}"
+                                         Checked="GraphGreenMode_Checked"
+                                         Content="Green">
+                            </RadioButton>
+                            <RadioButton x:Name="graphBlueMode"
+                                         GroupName="GraphShowing"
+                                         Margin="5"
+                                         IsChecked="{Binding Path=GraphShowingMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static local:GraphShowingMode.Blue}, Mode=TwoWay}"
+                                         Checked="GraphBlueMode_Checked"
+                                         Content="Blue">
+                            </RadioButton>
+                            <RadioButton x:Name="graphPhaseMode"
+                                         GroupName="GraphShowing"
+                                         Margin="5"
+                                         IsChecked="{Binding Path=GraphShowingMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static local:GraphShowingMode.Phase}, Mode=TwoWay}"
+                                         Checked="GraphPhaseMode_Checked"
+                                         Content="Phase">
+                            </RadioButton>
+                            <Label Content="СКО:"></Label>
+                            <TextBox x:Name="rmseTextBox" VerticalAlignment="Center"
+                                 Margin="5"
+                                 Text="{Binding Path=RootMeanSquareErrorText, Mode=TwoWay}" Width="61">
+
+                            </TextBox>
+                        </StackPanel>
+                        <extraControls:SwordfishXYLineChartControl  x:Name="mainChartConrol"
+                                                                    Title=""
+                                                                    GraphInfoCollection="{Binding Path=GraphInfoCollection}"
+                                                                    Background="White">
+                        
+                        </extraControls:SwordfishXYLineChartControl>
+                    </DockPanel>
+
+                </Grid>
+            </Grid>
+        </DockPanel>
+    </Grid>
+</Window>

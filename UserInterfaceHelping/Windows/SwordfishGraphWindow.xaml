@@ -1,0 +1,24 @@
+﻿<Window x:Class="UserInterfaceHelping.SwordfishGraphWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:extraControls="clr-namespace:ExtraControls;assembly=ExtraControls"
+        Title="GraphWindow" Height="300" Width="300">
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <DockPanel DockPanel.Dock="Top">
+                <Menu x:Name="mainMenu" DockPanel.Dock="Top">
+                    <MenuItem Header="Window">
+                        <MenuItem x:Name="saveContentMenuItem" Header="Save Content Image To File"
+                                  Click="SaveContentMenuItem_Click">
+
+                        </MenuItem>
+                    </MenuItem>
+                </Menu>
+            </DockPanel>
+            <extraControls:SwordfishXYLineChartControl x:Name="chartControl" Background="White">
+
+            </extraControls:SwordfishXYLineChartControl>
+        </DockPanel>
+                
+    </Grid>
+</Window>

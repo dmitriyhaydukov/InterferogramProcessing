@@ -1,0 +1,10 @@
+packages/
+bin/
+obj/
+Debug/
+Release/
+x64/
+*.pdb
+*.sdf
+*.suo
+*.user

@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{063706A2-FD76-47F6-B488-EBF621A78E07}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>InterferogramProcessing</RootNamespace>
+    <AssemblyName>InterferogramProcessor</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Practices.Prism">
+      <HintPath>..\Library\Microsoft.Practices.Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Interactivity">
+      <HintPath>..\Library\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.MefExtensions">
+      <HintPath>..\Library\Microsoft.Practices.Prism.MefExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.UnityExtensions">
+      <HintPath>..\Library\Microsoft.Practices.Prism.UnityExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\Library\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\Library\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="OsmStepMotorController">
+      <HintPath>..\Library\OsmStepMotorController.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WPFExtensions">
+      <HintPath>..\Library\WPFExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="ZedGraph">
+      <HintPath>..\Library\ZedGraph.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="DecodingAlgorithm.cs" />
+    <Compile Include="DecodingManager.cs" />
+    <Compile Include="Enums\ImagesViewingMode.cs" />
+    <Compile Include="Enums\GraphShowingMode.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="GenerableInterferogramInfo.cs" />
+    <Compile Include="Helpers\ColorsCollection.cs" />
+    <Compile Include="Helpers\MatricesProcessingHelper.cs" />
+    <Compile Include="Windows\CameraWindow.xaml.cs">
+      <DependentUpon>CameraWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ColorNumberWindow.xaml.cs">
+      <DependentUpon>ColorNumberWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\GenericPhaseShiftInfoWindow.xaml.cs">
+      <DependentUpon>GenericPhaseShiftInfoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MotorWindow.xaml.cs">
+      <DependentUpon>MotorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\PhaseShiftInfoWindow.xaml.cs">
+      <DependentUpon>PhaseShiftInfoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\RectanglePulses.xaml.cs">
+      <DependentUpon>RectanglePulses.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WrappingStream.cs" />
+    <Page Include="Windows\CameraWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\ColorNumberWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\GenericPhaseShiftInfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\InterferogramInfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\InterferogramProcessingHelper.cs" />
+    <Compile Include="Helpers\ImagesProcessingHelper.cs" />
+    <Compile Include="ViewModels\ImagesViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ProcessingManager.cs" />
+    <Compile Include="Windows\InterferogramInfoWindow.xaml.cs">
+      <DependentUpon>InterferogramInfoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Windows\MotorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\PhaseShiftInfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\RectanglePulses.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="App.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EDSDKLib\EDSDKLib.csproj">
+      <Project>{aeb0a485-01fc-4111-818c-e81434a388f1}</Project>
+      <Name>EDSDKLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExtraControls\ExtraControls.csproj">
+      <Project>{986427e7-41e8-412d-9009-27cf014da1bd}</Project>
+      <Name>ExtraControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExtraLibrary\ExtraLibrary.csproj">
+      <Project>{f6b5e69d-daad-42d1-8f78-f880578f704a}</Project>
+      <Name>ExtraLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExtraMVVM\ExtraMVVM.csproj">
+      <Project>{49e1ad67-eff1-45c1-b279-7e4dd635137e}</Project>
+      <Name>ExtraMVVM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExtraSystemHelping\ExtraSystemHelping.csproj">
+      <Project>{9ca5f03c-dfe3-4b06-9f24-94c9fc31c54f}</Project>
+      <Name>ExtraSystemHelping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExtraWPF\ExtraWPF.csproj">
+      <Project>{005b18dd-14a1-49e0-8cb1-93c337c7abfb}</Project>
+      <Name>ExtraWPF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Interferometry\Interferometry.csproj">
+      <Project>{db3a9b08-0824-403a-90f7-b95c34584b57}</Project>
+      <Name>Interferometry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UserInterfaceHelping\UserInterfaceHelping.csproj">
+      <Project>{27c835e6-6014-48c5-ab10-7f72f4cc02cc}</Project>
+      <Name>UserInterfaceHelping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WPFColorPickerLib\WPFColorPickerLib.csproj">
+      <Project>{587acfba-1a74-4a38-98c4-69442eccb7dc}</Project>
+      <Name>WPFColorPickerLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

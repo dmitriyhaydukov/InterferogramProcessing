@@ -1,0 +1,12 @@
+﻿<Window x:Class="InterferogramProcessing.ColorNumberWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ColorNimberWindow" Height="184" Width="313">
+    <StackPanel VerticalAlignment="Center">
+        <Label x:Name="colorLabel" Content="" Margin="5"></Label>
+        <TextBox x:Name="numberTextBox" Margin="5"></TextBox>
+        <Button x:Name="okButton" Content="OK" Click="okButton_Click" Margin="5"></Button>
+        <Button x:Name="cancelButton" Content="Cancel" Click="cancelButton_Click" Margin="5"></Button>
+    </StackPanel>
+    
+</Window>
