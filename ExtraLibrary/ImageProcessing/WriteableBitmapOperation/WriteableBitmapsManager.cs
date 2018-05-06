@@ -8,7 +8,8 @@ using System.Windows.Media.Imaging;
 using System.IO;
 using ExtraLibrary.Mathematics.Matrices;
 
-namespace ExtraLibrary.Imaging {
+namespace ExtraLibrary.ImageProcessing
+{
     public class WriteableBitmapsManager {
         //------------------------------------------------------------------------------------------------
         //Создание изображений из файлов

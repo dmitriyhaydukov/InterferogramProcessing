@@ -7,7 +7,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using ExtraLibrary.Mathematics.Matrices;
 
-namespace ExtraLibrary.Imaging {
+namespace ExtraLibrary.ImageProcessing
+{
     public class BitmapWrapper {
         //-------------------------------------------------------------------------------------------------------
         //Матрица яркости из изображения (диапазон 0..1)

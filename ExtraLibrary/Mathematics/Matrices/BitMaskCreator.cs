@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using ExtraLibrary.Imaging;
+using ExtraLibrary.ImageProcessing;
 
 namespace ExtraLibrary.Mathematics.Matrices {
     

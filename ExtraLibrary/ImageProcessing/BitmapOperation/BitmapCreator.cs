@@ -6,7 +6,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using ExtraLibrary.Mathematics.Matrices;
 
-namespace ExtraLibrary.Imaging {
+namespace ExtraLibrary.ImageProcessing
+{
     public class BitmapCreator {
         //-------------------------------------------------------------------------------------------------------
         //Создание изображения из файла

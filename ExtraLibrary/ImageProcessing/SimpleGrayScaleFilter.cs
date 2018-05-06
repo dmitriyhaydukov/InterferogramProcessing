@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ExtraLibrary.Mathematics.Matrices;
 
-namespace ExtraLibrary.Imaging.ImageProcessing {
+namespace ExtraLibrary.ImageProcessing {
     //Простой фильтр
     public class SimpleGrayScaleFilter {
         //------------------------------------------------------------------------------------------------

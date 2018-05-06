@@ -5,7 +5,8 @@ using System.Text;
 using System.Windows.Media;
 using System.Drawing;
 
-namespace ExtraLibrary.Imaging {
+namespace ExtraLibrary.ImageProcessing
+{
     public class ColorWrapper {
         //-----------------------------------------------------------------------------
         //Интенсивность серого

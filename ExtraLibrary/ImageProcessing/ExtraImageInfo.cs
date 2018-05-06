@@ -8,7 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ExtraLibrary.Mathematics.Matrices;
 
-namespace ExtraLibrary.Imaging {
+namespace ExtraLibrary.ImageProcessing {
     public class ExtraImageInfo {
         public WriteableBitmap Image {
             get;

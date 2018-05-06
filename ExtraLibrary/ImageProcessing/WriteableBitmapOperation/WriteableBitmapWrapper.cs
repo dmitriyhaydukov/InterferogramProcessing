@@ -11,7 +11,8 @@ using drawing = System.Drawing;
 using ExtraLibrary.Mathematics.Matrices;
 using ExtraLibrary.Geometry2D;
 
-namespace ExtraLibrary.Imaging {
+namespace ExtraLibrary.ImageProcessing
+{
     public abstract class WriteableBitmapWrapper {
         protected WriteableBitmap writeableBitmap;
         //----------------------------------------------------------------------------------------

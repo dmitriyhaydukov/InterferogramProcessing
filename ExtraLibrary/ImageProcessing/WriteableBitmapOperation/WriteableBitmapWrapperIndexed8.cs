@@ -6,7 +6,8 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace ExtraLibrary.Imaging {
+namespace ExtraLibrary.ImageProcessing
+{
     public class WriteableBitmapWrapperIndexed8 : WriteableBitmapWrapper {
         //-----------------------------------------------------------------------------------------------------
         public WriteableBitmapWrapperIndexed8( WriteableBitmap writeableBitmap ) {

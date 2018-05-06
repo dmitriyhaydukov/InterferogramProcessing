@@ -6,7 +6,8 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using System.Drawing;
 
-namespace ExtraLibrary.Imaging {
+namespace ExtraLibrary.ImageProcessing
+{
     public class BitmapImageCreator {
         //------------------------------------------------------------------------------------------
         //Создание BitmapImage из файла

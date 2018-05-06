@@ -8,7 +8,8 @@ using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
 using System.Windows;
 
-namespace ExtraLibrary.Imaging {
+namespace ExtraLibrary.ImageProcessing
+{
     public class ImagesConverter {
         //-------------------------------------------------------------------------------------------------------
         [DllImport( "gdi32.dll" )]

@@ -10,7 +10,7 @@ using ExtraLibrary.Mathematics.Sets;
 using ExtraLibrary.Mathematics.Matrices;
 using ExtraLibrary.Mathematics.Transformation;
 using ExtraLibrary.Randomness;
-using ExtraLibrary.Imaging;
+using ExtraLibrary.ImageProcessing;
 using ExtraLibrary.OS;
 using ExtraLibrary.Geometry2D;
 using ExtraLibrary.Geometry3D;

@@ -16,7 +16,8 @@ using ImageMagick;
 using EDSDKLib;
 
 
-namespace ExtraLibrary.Imaging {
+namespace ExtraLibrary.ImageProcessing
+{
     public class WriteableBitmapCreator {
         //------------------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------------------

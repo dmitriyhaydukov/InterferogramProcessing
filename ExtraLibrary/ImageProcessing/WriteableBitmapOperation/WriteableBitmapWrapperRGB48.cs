@@ -5,14 +5,15 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
- 
-namespace ExtraLibrary.Imaging {
-    class WriteableBitmapWrapperBGRA32 : WriteableBitmapWrapper {
+
+namespace ExtraLibrary.ImageProcessing
+{
+    class WriteableBitmapWrapperRGB48 : WriteableBitmapWrapper {
         //----------------------------------------------------------------------------------------
         //Конструктор
-        public WriteableBitmapWrapperBGRA32( WriteableBitmap writeableBitmap ) {
+        public WriteableBitmapWrapperRGB48( WriteableBitmap writeableBitmap ) {
             bool checkFormat =
-                writeableBitmap.Format == PixelFormats.Bgra32;
+                writeableBitmap.Format == PixelFormats.Rgb48;
             if ( !checkFormat ) {
                 throw new ImageException();
             }
@@ -21,18 +22,23 @@ namespace ExtraLibrary.Imaging {
         //----------------------------------------------------------------------------------------
         //Получить цвет пикселя
         public override Color GetPixelColor( int x, int y ) {
-            byte[] pixelBytes = new byte[ 4 ];
+            ushort[] pixelBytes = new ushort[ 3 ];
             int stride = this.GetStride();
             Int32Rect rect = new Int32Rect( x, y, 1, 1 );
             int offset = this.GetOffset( x, y );
             this.writeableBitmap.CopyPixels( rect, pixelBytes, stride, 0 );
 
-            byte blue = pixelBytes[ 0 ];
-            byte green = pixelBytes[ 1 ];
-            byte red = pixelBytes[ 2 ];
-            byte alpha = pixelBytes[ 3 ];
+            ushort red = pixelBytes[ 0 ];
+            ushort green = pixelBytes[ 1 ];
+            ushort blue = pixelBytes[ 2 ];
+            
+            Color color = Color.FromRgb
+                (
+                    Convert.ToByte( red ),
+                    Convert.ToByte( green ),
+                    Convert.ToByte( blue )
+                );
 
-            Color color = Color.FromArgb( alpha, red, green, blue );
             return color;
         }
         //----------------------------------------------------------------------------------------
@@ -41,13 +47,14 @@ namespace ExtraLibrary.Imaging {
             byte red = color.R;
             byte green = color.G;
             byte blue = color.B;
-            byte alpha = color.A;
-
-            byte[] pixelBytes = new byte[] { blue, green, red, alpha };
+            
+            ushort[] pixelBytes = new ushort[] { red, green, blue };
             Int32Rect rect = new Int32Rect( x, y, 1, 1 );
             int stride = this.GetStride();
             this.writeableBitmap.WritePixels( rect, pixelBytes, stride, 0 );
         }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         public override double GetGrayValue( int x, int y ) {
             throw new Exception();
@@ -59,3 +66,4 @@ namespace ExtraLibrary.Imaging {
         //----------------------------------------------------------------------------------------
     }
 }
+

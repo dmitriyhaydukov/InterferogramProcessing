@@ -17,7 +17,7 @@ using System.Numerics;
 
 using ExtraControls;
 using ExtraMVVM;
-using ExtraLibrary.Imaging;
+using ExtraLibrary.ImageProcessing;
 using ExtraLibrary.OS;
 using ExtraLibrary.Arraying.ArrayOperation;
 using ExtraLibrary.Arraying.ArrayCreation;
@@ -32,7 +32,7 @@ using ExtraLibrary.Mathematics.Numbers;
 using ExtraLibrary.Mathematics.Transformation;
 using ExtraLibrary.Mathematics.Filtering;
 using ExtraLibrary.Randomness;
-using ExtraLibrary.Imaging.ImageProcessing;
+using ExtraLibrary.ImageProcessing;
 using ExtraLibrary.Geometry2D;
 using ExtraLibrary.Geometry3D;
 using ExtraLibrary.Collections;
