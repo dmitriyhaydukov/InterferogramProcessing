@@ -27,7 +27,6 @@ using ExtraLibrary.Mathematics.Sets;
 using ExtraLibrary.Mathematics.Progressions;
 using ExtraLibrary.Randomness;
 using ExtraLibrary.Mathematics.Transformation;
-using ExtraLibrary.ImageProcessing;
 using ExtraLibrary.Geometry2D;
 using ExtraLibrary.Geometry3D;
 using ExtraLibrary.Collections;
@@ -129,7 +128,7 @@ namespace InterferogramProcessing {
                     ExtraImageInfo extraImageInfo = InterferogramProcessingHelper.CreateImageFromFile( fileName );
                     //WriteableBitmap image = InterferogramProcessingHelper.CreateImageFromFile( fileName );
                     string imageName = Path.GetFileName( fileName );
-                    RealMatrix matrix = extraImageInfo.RedMatrix;
+                    RealMatrix matrix = extraImageInfo.Matrix;
                     ImageInfo imageInfo = new ImageInfo( imageName, extraImageInfo.Image, matrix );
                     this.ImageInfoCollection.Add( imageInfo );
                 }

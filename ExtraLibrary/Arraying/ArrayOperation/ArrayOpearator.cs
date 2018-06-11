@@ -194,6 +194,18 @@ namespace ExtraLibrary.Arraying.ArrayOperation {
             }
             return squareSum;
         }
+
+        //--------------------------------------------------------------------------------------------
+        public static int GetSquareSum(int[] array)
+        {
+            int squareSum = 0;
+            for (int index = 0; index < array.Length; index++)
+            {
+                int x = array[index];
+                squareSum += x * x;
+            }
+            return squareSum;
+        }
         //--------------------------------------------------------------------------------------------
         //Элементы массива по заданным индексам
         public static T[] GetElementsByIndecies<T>( T[] array, int[] indecies ) {

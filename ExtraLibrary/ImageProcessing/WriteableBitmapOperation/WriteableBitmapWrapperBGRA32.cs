@@ -49,6 +49,7 @@ namespace ExtraLibrary.ImageProcessing
             int stride = this.GetStride();
             this.writeableBitmap.WritePixels( rect, pixelBytes, stride, 0 );
         }
+        //--------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         public override double GetGrayValue( int x, int y ) {
             throw new Exception();

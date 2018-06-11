@@ -15,17 +15,7 @@ namespace ExtraLibrary.ImageProcessing {
             set;
         }
 
-        public RealMatrix RedMatrix {
-            get;
-            set;
-        }
-
-        public RealMatrix GreenMatrix {
-            get;
-            set;
-        }
-
-        public RealMatrix BlueRedMatrix {
+        public RealMatrix Matrix {
             get;
             set;
         }

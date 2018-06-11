@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.IO;
 
+using ExtraLibrary.ImageProcessing.Raw;
 using ExtraLibrary.Mathematics.Matrices;
 using ExtraLibrary.Mathematics.Sets;
 using ExtraLibrary.Mathematics.Transformation;
@@ -105,23 +106,24 @@ namespace ExtraLibrary.ImageProcessing
 
             }
             */
-
+            
+            /*
             if ( fileName.ToUpper().EndsWith( "CR2" ) ) {
 
-                /*
-                System.GC.Collect();
-
-                BitmapDecoder bitmapDecoder =
-                    BitmapDecoder.Create( new Uri( fileName ), 
-                    BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.None );
-
-                BitmapFrame frame = bitmapDecoder.Frames[ 0 ];
                 
-                WriteableBitmap bitmap = new WriteableBitmap( frame );
-                WriteableBitmapWrapper wrapper = WriteableBitmapWrapper.Create( bitmap );
+                //System.GC.Collect();
 
-                Color c = wrapper.GetPixelColor( 300, 300 );
-                */
+                //BitmapDecoder bitmapDecoder =
+                //    BitmapDecoder.Create( new Uri( fileName ), 
+                //    BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.None );
+
+                //BitmapFrame frame = bitmapDecoder.Frames[ 0 ];
+                
+                //WriteableBitmap bitmap = new WriteableBitmap( frame );
+                //WriteableBitmapWrapper wrapper = WriteableBitmapWrapper.Create( bitmap );
+
+                //Color c = wrapper.GetPixelColor( 300, 300 );
+                
 
                 System.GC.Collect();
 
@@ -142,27 +144,81 @@ namespace ExtraLibrary.ImageProcessing
                 error = EDSDK.EdsCreateFileStream(convertedFileName, EDSDK.EdsFileCreateDisposition.CreateAlways, EDSDK.EdsAccess.Write, out outStream);
                 error = EDSDK.EdsSaveImage(imgRef, EDSDK.EdsTargetImageType.TIFF16, settings, outStream);
                 EDSDK.EdsRelease(outStream);
-                                
-
-
-
 
                 ExtraImageInfo extraImageInfo = new ExtraImageInfo();
                 return extraImageInfo;
 
             }
-            
-            else {
+            */
+            if (fileName.ToUpper().EndsWith("CR2"))
+            {
+                Interval<double> finishInterval = new Interval<double>(0, 255);
 
-                Stream imageStreamSource = new FileStream( fileName, FileMode.Open, FileAccess.Read, FileShare.Read );
+                IntegerMatrix matrix = RawReader.ReadImageFromFile(fileName);
+                //matrix = matrix.GetSubMatrix(0, 2640 - 1, matrix.RowCount - 1, matrix.ColumnCount - 1);
+                               
+                
+                int min = matrix.GetMinValue();
+                int max = matrix.GetMaxValue();
+                                                
+                IntegerMatrix redMatrix = InterpolationHelper.GetRedMatrix(matrix);
+                int minRed = redMatrix.GetMinValue();
+                int maxRed = redMatrix.GetMaxValue();
 
-                //TiffBitmapDecoder decoder = 
-                //    new TiffBitmapDecoder( imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default );
+                IntegerMatrix greenMatrix = InterpolationHelper.GetGreenMatrix(matrix);
+                int minGreen = greenMatrix.GetMinValue();
+                int maxGreen = greenMatrix.GetMaxValue();
+                
+                IntegerMatrix blueMatrix = InterpolationHelper.GetBlueMatrix(matrix);
+                int minBlue = blueMatrix.GetMinValue();
+                int maxBlue = blueMatrix.GetMaxValue();
 
-                BitmapDecoder decoder = BitmapDecoder.Create( imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default );
-                BitmapSource bitmapSource = decoder.Frames[ 0 ];
+                int minValue = (new int[] { minRed, minGreen, minBlue }).Min();
+                int maxValue = (new int[] { maxRed, maxGreen, maxBlue }).Max();
+                
+                RealIntervalTransform redIntervalTransform = 
+                    new RealIntervalTransform(new Interval<double>(minValue, maxValue), finishInterval);
+                IntegerMatrix resRedMatrix = 
+                    IntegerMatrixValuesTransform.TransformMatrixValues(redMatrix, redIntervalTransform);
+                                
+                RealIntervalTransform greenIntervalTransform =
+                    new RealIntervalTransform(new Interval<double>(minValue, maxValue), finishInterval);
+                IntegerMatrix resGreenMatrix =
+                    IntegerMatrixValuesTransform.TransformMatrixValues(greenMatrix, greenIntervalTransform);
+                                
+                RealIntervalTransform blueIntervalTransform =
+                    new RealIntervalTransform(new Interval<double>(minValue, maxValue), finishInterval);
+                IntegerMatrix resBlueMatrix =
+                    IntegerMatrixValuesTransform.TransformMatrixValues(blueMatrix, blueIntervalTransform);
+                                
+                WriteableBitmap resImage =
+                    WriteableBitmapCreator.CreateWriteableBitmapFromMatricesRGB
+                    (resRedMatrix, resGreenMatrix, resBlueMatrix, OS.OS.IntegerSystemDpiX, OS.OS.IntegerSystemDpiY);
+                                
+                /*
+                IntegerMatrix resMatrix =
+                    IntegerMatrixValuesTransform.TransformMatrixValuesToFinishIntervalValues(matrix, finishInterval);
 
-                WriteableBitmap resultWriteableBitmap = new WriteableBitmap( bitmapSource );
+                WriteableBitmap resImage =
+                    WriteableBitmapCreator.CreateGrayScaleWriteableBitmapFromMatrix
+                    (resMatrix, OS.OS.IntegerSystemDpiX, OS.OS.IntegerSystemDpiY);
+                */
+
+                ExtraImageInfo extraImageInfo = new ExtraImageInfo();
+                extraImageInfo.Image = resImage;
+                
+                return extraImageInfo;
+            }
+
+            else
+            {
+
+                Stream imageStreamSource = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+                                
+                BitmapDecoder decoder = BitmapDecoder.Create(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+                BitmapSource bitmapSource = decoder.Frames[0];
+
+                WriteableBitmap resultWriteableBitmap = new WriteableBitmap(bitmapSource);
 
                 ExtraImageInfo extraImageInfo = new ExtraImageInfo();
                 extraImageInfo.Image = resultWriteableBitmap;
@@ -207,6 +263,31 @@ namespace ExtraLibrary.ImageProcessing
                     red = green = blue = Convert.ToByte( grayIntensity );
                     Color color = Color.FromRgb( red, green, blue );
                     bitmapWrapper.SetPixelColor( x, y, color );
+                }
+            }
+            return writeableBitmap;
+        }
+        //------------------------------------------------------------------------------------------------
+        //Создание изображения из матрицы интенсивностей серого
+        public static WriteableBitmap CreateGrayScaleWriteableBitmapFromMatrix(
+            IntegerMatrix grayScaleMatrix,
+            int dpiX, int dpiY
+        )
+        {
+            int pixelWidth = grayScaleMatrix.ColumnCount;
+            int pixelHeight = grayScaleMatrix.RowCount;
+            WriteableBitmap writeableBitmap = WriteableBitmapCreator.CreateWriteableBitmap
+                (pixelWidth, pixelHeight, dpiX, dpiY, PixelFormats.Bgra32);
+            WriteableBitmapWrapper bitmapWrapper = WriteableBitmapWrapper.Create(writeableBitmap);
+            for (int x = 0; x < pixelWidth; x++)
+            {
+                for (int y = 0; y < pixelHeight; y++)
+                {
+                    int grayIntensity = grayScaleMatrix[y, x];
+                    byte red, green, blue;
+                    red = green = blue = Convert.ToByte(grayIntensity);
+                    Color color = Color.FromRgb(red, green, blue);
+                    bitmapWrapper.SetPixelColor(x, y, color);
                 }
             }
             return writeableBitmap;
@@ -275,18 +356,58 @@ namespace ExtraLibrary.ImageProcessing
             WriteableBitmap newImage = WriteableBitmapCreator.CreateWriteableBitmap
                 ( width, height, dpiX, dpiY, pixelFormat );
             WriteableBitmapWrapper wrapper = WriteableBitmapWrapper.Create( newImage );
-            for ( int x = 0; x < newImage.PixelWidth; x++ ) {
-                for ( int y = 0; y < newImage.PixelHeight; y++ ) {
-                    byte red = ( byte )( ( int )redMatrix[ y, x ] );
-                    byte green = ( byte )( ( int )greenMatrix[ y, x ] );
-                    byte blue = ( byte )( ( int )blueMatrix[ y, x ] );
-                    Color color = Color.FromRgb( red, green, blue );
-                    wrapper.SetPixelColor( x, y, color );
+
+            byte[] pixelBytes = new byte[4 * width * height];   //BGRA
+            int pixelByteIndex = 0;
+
+            for (int y = 0; y < newImage.PixelHeight; y++)
+            {
+                for ( int x = 0; x < newImage.PixelWidth; x++ ) {
+                
+                    pixelBytes[pixelByteIndex++] = Convert.ToByte(blueMatrix[y, x]);
+                    pixelBytes[pixelByteIndex++] = Convert.ToByte(greenMatrix[y, x]);
+                    pixelBytes[pixelByteIndex++] = Convert.ToByte(redMatrix[y, x]);
+                    pixelBytes[pixelByteIndex++] = byte.MaxValue;
                 }
             }
+
+            wrapper.WritePixels(pixelBytes);
+
             return newImage;
         }
         //------------------------------------------------------------------------------------------------
+        //Создание изображения из матриц R G B
+        public static WriteableBitmap CreateWriteableBitmapFromMatricesRGB(
+            IntegerMatrix redMatrix, IntegerMatrix greenMatrix, IntegerMatrix blueMatrix,
+            int dpiX, int dpiY
+        )
+        {
+            int width = redMatrix.ColumnCount;
+            int height = redMatrix.RowCount;
+            PixelFormat pixelFormat = PixelFormats.Bgra32;
+            WriteableBitmap newImage = WriteableBitmapCreator.CreateWriteableBitmap
+                (width, height, dpiX, dpiY, pixelFormat);
+            WriteableBitmapWrapper wrapper = WriteableBitmapWrapper.Create(newImage);
+
+            byte[] pixelBytes = new byte[4 * width * height];   //BGRA
+            int pixelByteIndex = 0;
+
+            for (int y = 0; y < newImage.PixelHeight; y++)
+            {
+                for (int x = 0; x < newImage.PixelWidth; x++)
+                {
+                                
+                    pixelBytes[pixelByteIndex++] = Convert.ToByte(blueMatrix[y, x]);
+                    pixelBytes[pixelByteIndex++] = Convert.ToByte(greenMatrix[y, x]);
+                    pixelBytes[pixelByteIndex++] = Convert.ToByte(redMatrix[y, x]);
+                    pixelBytes[pixelByteIndex++] = byte.MaxValue;
+                }
+            }
+
+            wrapper.WritePixels(pixelBytes);
+
+            return newImage;
+        }
         //------------------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------------------
     }

@@ -57,7 +57,7 @@ namespace InterferogramProcessing {
             if ( isImageFormatGrayScale ) {
                 resultImage = extraImageInfo.Image;
             }
-            else {
+            else if (extraImageInfo.Image.Format != PixelFormats.Bgra32) {
                 PixelFormat pixelFormat = PixelFormats.Bgra32;
                 WriteableBitmap newImage = WriteableBitmapConverter.ConvertWriteableBitmap( extraImageInfo.Image, pixelFormat );
                 resultImage = newImage;

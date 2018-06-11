@@ -118,6 +118,16 @@ namespace ExtraLibrary.ImageProcessing
         //Установить цвет пикселя
         public abstract void SetPixelColor( int x, int y, media.Color color );
         //-----------------------------------------------------------------------------------------------
+        public void WritePixels(byte[] pixelBytes)
+        {
+            int width = this.writeableBitmap.PixelWidth;
+            int height = this.writeableBitmap.PixelHeight;
+
+            Int32Rect rect = new Int32Rect(0, 0, width, height);
+            int stride = this.GetStride();
+            this.writeableBitmap.WritePixels(rect, pixelBytes, stride, 0);
+        }
+        //-----------------------------------------------------------------------------------------------
         public abstract double GetGrayValue( int x, int y );
         public abstract double SetGrayValue( int x, int y, double grayValue );
         //-----------------------------------------------------------------------------------------------
