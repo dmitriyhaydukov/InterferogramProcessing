@@ -149,6 +149,10 @@
                                   Command="{Binding Path=DilatateImageCommand}">
                         </MenuItem>
 
+                        <MenuItem Header="Нормализация (A)"
+                                  Command="{Binding Path=CustomNormalizeImageCommand}">
+                        </MenuItem>
+
                     </MenuItem>
                     
                     <MenuItem Header="Расшифровка">

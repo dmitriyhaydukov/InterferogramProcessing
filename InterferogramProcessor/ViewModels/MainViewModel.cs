@@ -835,6 +835,22 @@ namespace InterferogramProcessing {
             }
         }
         //--------------------------------------------------------------------------------------------------
+        private DelegateCommand<object> customNormalizeImageCommand;
+        public ICommand CustomNormalizeImageCommand
+        {
+            get
+            {
+                if (this.customNormalizeImageCommand == null)
+                {
+                    this.customNormalizeImageCommand = new DelegateCommand<object>
+                        (this.CustomNormalizeImage, this.CanAlwaysPerformOperation);
+                }
+                return this.customNormalizeImageCommand;
+            }
+        }
+
+
+        //--------------------------------------------------------------------------------------------------
         private DelegateCommand<object> generateRectanglePulsesCommand;
         public ICommand GenerateRectanglePulsesCommand {
             get {
@@ -2860,7 +2876,23 @@ namespace InterferogramProcessing {
             this.MainLeftImage = wrapper.Image;
         }
         //------------------------------------------------------------------------------------------------------
-                
+        public void CustomNormalizeImage( object parameter )
+        {
+            WriteableBitmap image = this.MainLeftImage as WriteableBitmap;
+            
+            WriteableBitmapWrapper wrapper = WriteableBitmapWrapper.Create(image);
+            RealMatrix matrix = wrapper.GetGrayScaleMatrix();
+
+            Interval<double> startInterval = new Interval<double>(0, 255.0);
+            Interval<double> finishInterval = new Interval<double>(0, 255.0 * 167.0 / 211.0);
+            RealIntervalTransform transform = new RealIntervalTransform(startInterval, finishInterval);
+
+            RealMatrix resMatrix = RealMatrixValuesTransform.TransformMatrixValues(matrix, transform);
+            WriteableBitmap resImage = WriteableBitmapCreator.CreateGrayScaleWriteableBitmapFromMatrix(resMatrix, OS.IntegerSystemDpiX, OS.IntegerSystemDpiY);
+
+            this.MainRightImage = resImage;
+        }
+
         public BitmapSource MainLeftImage {
             get {
                 return this.mainLeftImage;
