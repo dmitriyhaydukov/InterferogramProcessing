@@ -77,14 +77,20 @@ namespace InterferogramProcessing {
         }
         //--------------------------------------------------------------------------------------------------
         //Фазовые сдвиги
-        public static double[] GetPhaseShifts() { 
+        public static double[] GetPhaseShifts() {
             //double[] phaseShifts = new double[] { 0, Math.PI / 3, 4 * Math.PI / 3 };
             //double[] phaseShifts = new double[] { 0, 2* Math.PI / 9, 4 * Math.PI / 9 };
             //double[] phaseShifts = new double[] { 0, Math.PI / 2, Math.PI };
-            
-            double[] phaseShifts = new double[] { 0, Math.PI / 2, 4 * Math.PI / 3 };
-            
-            return phaseShifts;
+
+            //double[] phaseShifts = new double[] { 0, Math.PI / 2, 4 * Math.PI / 3 };
+
+            List<double> list = new List<double>();
+            for (double phase = 0; phase < 2 * Math.PI; phase += Math.PI / 3)
+            {
+                list.Add(phase);
+            }
+
+            return list.ToArray();
         }
         //--------------------------------------------------------------------------------------------------
         public static double[] GetPhaseShiftsForGenericAlgorithm() {

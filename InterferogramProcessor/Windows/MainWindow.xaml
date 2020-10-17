@@ -153,6 +153,14 @@
                     
                     <MenuItem Header="Расшифровка">
                         <MenuItem Header="Расшифровать" Command="{Binding Path=DecodeCommand}"></MenuItem>
+
+                        <MenuItem Header="Отобразить график - Интенсивности двух"
+                                  Command="{Binding Path=ShowIntensitiesGraphCommand}"
+                                  CommandParameter="{Binding ElementName=rowNumberTextBox, Path=Text}"
+                                  Visibility="Visible">
+
+                        </MenuItem>
+
                         <MenuItem Header="Отобразить график Числители - Знаменатели"
                                   Command="{Binding Path=ShowNumeratorsDenominatorsGraphCommand}"
                                   Visibility="Collapsed">
@@ -272,6 +280,10 @@
 
                         <MenuItem Header="Генерация импульсов"
                                   Command="{Binding Path=GenerateRectanglePulsesCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Вычесть прямую"
+                                  Command="{Binding Path=SubstractStraightFromGraphCommand}">
                         </MenuItem>
 
                     </MenuItem>

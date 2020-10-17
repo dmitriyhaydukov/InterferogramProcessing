@@ -39,11 +39,11 @@ namespace ExtraLibrary.Mathematics.Transformation {
         public ComplexMatrix GetCenteredFourierTransform2D( RealMatrix matrix ) {
             
             RealMatrix newMatrix = this.GetMatrixForCenteredFourierTransform( matrix );
-            //ComplexMatrix resultMatrix = this.GetFourierTransform2D( newMatrix );
+            ComplexMatrix resultMatrix = this.GetFourierTransform2D( newMatrix );
             
             //ComplexMatrix resultMatrix = this.GetCudaFourierTransform2D(matrix);
 
-            ComplexMatrix resultMatrix = this.GetCudaFourierTransform2D(newMatrix);
+            //ComplexMatrix resultMatrix = this.GetCudaFourierTransform2D(newMatrix);
             
             return resultMatrix;
         }
@@ -68,6 +68,7 @@ namespace ExtraLibrary.Mathematics.Transformation {
                 resultMatrix.SetRowData( row, fourierTransform );
             }
 
+            
             //Обработка столбцов
             for ( int column = 0; column < resultMatrix.ColumnCount; column++ ) {
                 Complex[] complexData = resultMatrix.GetColumn( column );
@@ -75,6 +76,7 @@ namespace ExtraLibrary.Mathematics.Transformation {
                 resultMatrix.SetColumnData( column, fourierTransform );
             }
             
+
             return resultMatrix;
         }
         //----------------------------------------------------------------------------------------------
@@ -97,12 +99,14 @@ namespace ExtraLibrary.Mathematics.Transformation {
                 resultMatrix.SetRowData( row, inverseFourierTransform );
             }
 
+            
             //Обработка столбцов
             for ( int column = 0; column < fourierTransform2D.ColumnCount; column++ ) {
                 Complex[] complexData = resultMatrix.GetColumn( column );
                 Complex[] inverseFourierTransform = this.GetInverseFourierTransform( complexData );
                 resultMatrix.SetColumnData( column, inverseFourierTransform );
             }
+            
                        
             return resultMatrix;
         }

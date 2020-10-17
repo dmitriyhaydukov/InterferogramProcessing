@@ -13,7 +13,8 @@ namespace InterferogramProcessing.Helpers {
         public ColorsCollection() {
             this.colors = new Color[] {
                 Colors.Red, Colors.Blue, Colors.Green,
-                Colors.Brown, Colors.Black
+                Colors.Brown, Colors.Black, Colors.Orange,
+                Colors.Brown, Colors.Lime
             };
         }
         //-----------------------------------------------------------------------------------------

@@ -690,6 +690,23 @@ namespace ExtraLibrary.Mathematics.Matrices {
             return resMatrix;
         }
         //------------------------------------------------------------------------------------------
+        public double[] GetValuesAsArray()
+        {
+            double[] resArray = new double[this.RowCount * this.ColumnCount];
+            int index = 0;
+
+            for (int row = 0; row < this.RowCount; row++)
+            {
+                for (int col = 0; col < this.ColumnCount; col++)
+                {
+                    resArray[index] = this[row, col];
+                    index++;
+                }
+            }
+
+            return resArray;
+        }
+
         //------------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------------
     }
