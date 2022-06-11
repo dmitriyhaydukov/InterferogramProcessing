@@ -111,6 +111,11 @@
                                   CommandParameter="{Binding ElementName=windowSizeTextBox, Path=Text}">
                         </MenuItem>
 
+                        <MenuItem Header="Фильтровать изображения медианным фильтром"
+                                  Command="{Binding Path=FilterImagesByMedianCommand}"
+                                  CommandParameter="{Binding ElementName=windowSizeTextBox, Path=Text}">
+                        </MenuItem>
+
                         <MenuItem Header="Вычесть фазы"
                                   Command="{Binding Path=SubstractPhasesCommand}">
                         </MenuItem>

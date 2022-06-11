@@ -564,7 +564,21 @@ namespace InterferogramProcessing {
                 }
                 return this.filterImagesByStepCommand;
             }
-        }    
+        }
+        //--------------------------------------------------------------------------------------------------
+        private DelegateCommand<object> filterImagesByMedianCommand;
+        public ICommand FilterImagesByMedianCommand
+        {
+            get
+            {
+                if (this.filterImagesByMedianCommand == null)
+                {
+                    this.filterImagesByMedianCommand = new DelegateCommand<object>
+                        (this.FilterImagesByMedian, this.CanAlwaysPerformOperation);
+                }
+                return this.filterImagesByMedianCommand;
+            }
+        }
         //--------------------------------------------------------------------------------------------------
         private DelegateCommand<object> filterFourierTransformsBySelectingCommand;
         public ICommand FilterFourierTransformsBySelectingCommand {
@@ -1983,6 +1997,31 @@ namespace InterferogramProcessing {
             imagesNames = ArrayOperator.AddStringToEachValue( imagesNames, " Filtered Image" );
 
             this.AddImagesToImagesList( resultImages, imagesNames, resultMatrices.ToArray() );
+        }
+        //--------------------------------------------------------------------------------------------------
+        //Фильтрация изображений медианным фильтром
+        public void FilterImagesByMedian(object parameter)
+        {
+            int windowSize = int.Parse((string)parameter);
+            IList<RealMatrix> grayScaleMatrices = this.GetSelectedGrayScaleMatrices();
+            MedianByRowsGrayScaleFilter medianByRowsGrayScaleFilter = new MedianByRowsGrayScaleFilter();
+
+            IList<RealMatrix> resultMatrices = new List<RealMatrix>();
+            for (int index = 0; index < grayScaleMatrices.Count; index++)
+            {
+                RealMatrix matrix = grayScaleMatrices[index];
+                RealMatrix filteredMatrix = medianByRowsGrayScaleFilter.ExecuteFiltration(matrix, windowSize);
+                resultMatrices.Add(filteredMatrix);
+            }
+
+            WriteableBitmap[] resultImages = WriteableBitmapsManager.CreateGrayScaleWriteableBitmapsFromMatrices
+                (OS.IntegerSystemDpiX, OS.IntegerSystemDpiY, resultMatrices.ToArray());
+
+            double[] numbers = ArrayCreator.CreateLinearSeriesArray(1, 1, resultImages.Length);
+            string[] imagesNames = ExtraLibrary.Converting.ArrayConverter.ToStringArray(numbers);
+            imagesNames = ArrayOperator.AddStringToEachValue(imagesNames, " Filtered Image");
+
+            this.AddImagesToImagesList(resultImages, imagesNames, resultMatrices.ToArray());
         }
         //--------------------------------------------------------------------------------------------------
         public void FilterByMaxSpectrumValue( object parameter ) {
