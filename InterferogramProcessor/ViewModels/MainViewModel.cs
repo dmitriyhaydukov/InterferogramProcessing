@@ -422,6 +422,20 @@ namespace InterferogramProcessing {
             }
         }
         //--------------------------------------------------------------------------------------------------
+        private DelegateCommand<object> enchanceEdgesCommand;
+        public ICommand EnchanceEdgesCommand
+        {
+            get
+            {
+                if (this.enchanceEdgesCommand == null)
+                {
+                    this.enchanceEdgesCommand = new DelegateCommand<object>
+                        (this.EnchanceEdges, this.CanAlwaysPerformOperation);
+                }
+                return this.enchanceEdgesCommand;
+            }
+        }
+        //--------------------------------------------------------------------------------------------------
         private DelegateCommand<object> substractImagesCommand;
         public ICommand SubstractImagesCommand {
             get {
@@ -1521,7 +1535,37 @@ namespace InterferogramProcessing {
             imagesNames = ArrayOperator.AddStringToEachValue( imagesNames, " Usual Filter" );
 
             this.AddImagesToImagesList( resultImages, imagesNames, newMatrices );
-        }               
+        }
+        //--------------------------------------------------------------------------------------------------
+        //Улучшить границы
+        public void EnchanceEdges(object parameter)
+        {            
+            IList<RealMatrix> grayScaleMatrices = this.GetSelectedGrayScaleMatrices();
+
+            RealMatrix mask = MatrixHandler.GetFilteredMaskForEdgeEnhancing();
+            RealMatrix[] newMatrices = MatricesManager.FilterMatricesByMask(grayScaleMatrices.ToArray(), mask);
+
+            double originMinValue = grayScaleMatrices[0].GetMinValue();
+            double originMaxValue = grayScaleMatrices[0].GetMaxValue();
+
+            double minValue = newMatrices[0].GetMinValue();
+            double maxValue = newMatrices[0].GetMaxValue();
+
+            Interval<double> startInterval = new Interval<double>(minValue, maxValue);
+            Interval<double> finishInterval = new Interval<double>(0, 255);
+
+            newMatrices = MatricesManager.TransformMatrices(startInterval, finishInterval, newMatrices);
+
+            WriteableBitmap[] resultImages =
+                WriteableBitmapsManager.CreateGrayScaleWriteableBitmapsFromMatrices
+                (OS.IntegerSystemDpiX, OS.IntegerSystemDpiY, newMatrices);
+
+            double[] numbers = ArrayCreator.CreateLinearSeriesArray(1, 1, resultImages.Length);
+            string[] imagesNames = ExtraLibrary.Converting.ArrayConverter.ToStringArray(numbers);
+            imagesNames = ArrayOperator.AddStringToEachValue(imagesNames, "Enchance edge filter");
+
+            this.AddImagesToImagesList(resultImages, imagesNames, newMatrices);
+        }
         //--------------------------------------------------------------------------------------------------
         //Вычитание изображений
         public void SubstractImages( object parameter ) {
