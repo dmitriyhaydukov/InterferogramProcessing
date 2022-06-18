@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2026
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterferogramProcessor", "InterferogramProcessor\InterferogramProcessor.csproj", "{063706A2-FD76-47F6-B488-EBF621A78E07}"
 	ProjectSection(ProjectDependencies) = postProject
 		{EBEDA91A-933B-4D2F-B6A3-4BD77BE7CE88} = {EBEDA91A-933B-4D2F-B6A3-4BD77BE7CE88}
@@ -221,7 +223,6 @@ Global
 		{EBEDA91A-933B-4D2F-B6A3-4BD77BE7CE88}.Debug|x86.ActiveCfg = Debug|x64
 		{EBEDA91A-933B-4D2F-B6A3-4BD77BE7CE88}.Release|Any CPU.ActiveCfg = Release|Win32
 		{EBEDA91A-933B-4D2F-B6A3-4BD77BE7CE88}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{EBEDA91A-933B-4D2F-B6A3-4BD77BE7CE88}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{EBEDA91A-933B-4D2F-B6A3-4BD77BE7CE88}.Release|Win32.ActiveCfg = Release|Win32
 		{EBEDA91A-933B-4D2F-B6A3-4BD77BE7CE88}.Release|Win32.Build.0 = Release|Win32
 		{EBEDA91A-933B-4D2F-B6A3-4BD77BE7CE88}.Release|x64.ActiveCfg = Release|x64
@@ -231,5 +232,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D05DFBAB-D1D9-4204-8D8F-616C9884D7B9}
 	EndGlobalSection
 EndGlobal

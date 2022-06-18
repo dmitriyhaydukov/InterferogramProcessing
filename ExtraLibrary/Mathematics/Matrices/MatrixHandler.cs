@@ -69,6 +69,7 @@ namespace ExtraLibrary.Mathematics.Matrices {
                 { -1, -1, -1 }
             };
             */
+
             double[,] mask1 = new double[3, 3]
             {
                 { 0, 0, 0 },
@@ -82,10 +83,30 @@ namespace ExtraLibrary.Mathematics.Matrices {
                 { 1, 1, 1 },
                 { 1, 1, 1 }
             };
+            
+            /*
+            double[,] mask1 = new double[5, 5]
+            {
+                { 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0 },
+                { 0, 0, 1, 0, 0 },
+                { 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0 }
+            };
+
+            double[,] mask2 = new double[5, 5]
+            {
+                { 1, 1, 1, 1, 1 },
+                { 1, 1, 1, 1, 1 },
+                { 1, 1, 1, 1, 1 },
+                { 1, 1, 1, 1, 1 },
+                { 1, 1, 1, 1, 1 }
+            };
+            */
 
             RealMatrix matrix1 = new RealMatrix(mask1);
             RealMatrix matrix2 = new RealMatrix(mask2);
-            double k = 15;
+            double k = 30;
 
             RealMatrix resMatrix = (matrix1 * k) - (matrix2 * (1 / 16.0));
 
