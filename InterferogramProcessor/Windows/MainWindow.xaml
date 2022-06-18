@@ -111,6 +111,16 @@
                                   CommandParameter="{Binding ElementName=windowSizeTextBox, Path=Text}">
                         </MenuItem>
 
+                        <MenuItem Header="Фильтровать изображения медианным фильтром"
+                                  Command="{Binding Path=FilterImagesByMedianCommand}"
+                                  CommandParameter="{Binding ElementName=windowSizeTextBox, Path=Text}">
+                        </MenuItem>
+
+                        <MenuItem Header="Улучшить границы"
+                                  Command="{Binding Path=EnchanceEdgesCommand}">
+
+                        </MenuItem>
+
                         <MenuItem Header="Вычесть фазы"
                                   Command="{Binding Path=SubstractPhasesCommand}">
                         </MenuItem>
@@ -147,6 +157,10 @@
 
                         <MenuItem Header="Дилатация"
                                   Command="{Binding Path=DilatateImageCommand}">
+                        </MenuItem>
+
+                        <MenuItem Header="Нормализация (A)"
+                                  Command="{Binding Path=CustomNormalizeImageCommand}">
                         </MenuItem>
 
                     </MenuItem>

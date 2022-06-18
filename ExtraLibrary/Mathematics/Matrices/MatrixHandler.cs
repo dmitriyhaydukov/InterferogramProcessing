@@ -60,6 +60,37 @@ namespace ExtraLibrary.Mathematics.Matrices {
             return resultMatrix;
         }
         //------------------------------------------------------------------------------------------------
+        public static RealMatrix GetFilteredMaskForEdgeEnhancing() {
+            /*
+            double[,] mask = new double[3, 3]
+            {
+                { -1, -1, -1 },
+                { -1, 9, -1  },
+                { -1, -1, -1 }
+            };
+            */
+            double[,] mask1 = new double[3, 3]
+            {
+                { 0, 0, 0 },
+                { 0, 1, 0 },
+                { 0, 0, 0 }
+            };
+
+            double[,] mask2 = new double[3, 3]
+            {
+                { 1, 1, 1 },
+                { 1, 1, 1 },
+                { 1, 1, 1 }
+            };
+
+            RealMatrix matrix1 = new RealMatrix(mask1);
+            RealMatrix matrix2 = new RealMatrix(mask2);
+            double k = 15;
+
+            RealMatrix resMatrix = (matrix1 * k) - (matrix2 * (1 / 16.0));
+
+            return resMatrix;
+        }
         //------------------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------------------

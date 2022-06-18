@@ -242,20 +242,7 @@ namespace InterferogramProcessing {
                 return this.showNumeratorsDenominatorsGraphCommand;
             }
         }
-        //--------------------------------------------------------------------------------------------------
-        private DelegateCommand<object> showIntensitiesGraphCommand;
-        public ICommand ShowIntensitiesGraphCommand
-        {
-            get
-            {
-                if (this.showIntensitiesGraphCommand == null)
-                {
-                    this.showIntensitiesGraphCommand = new DelegateCommand<object>
-                        (this.ShowIntensitiesGraph, this.CanAlwaysPerformOperation);
-                }
-                return this.showIntensitiesGraphCommand;
-            }
-        }
+
         //--------------------------------------------------------------------------------------------------
         private DelegateCommand<object> generateImagesCommand;
         public ICommand GenerateImagesCommand {
@@ -435,6 +422,20 @@ namespace InterferogramProcessing {
             }
         }
         //--------------------------------------------------------------------------------------------------
+        private DelegateCommand<object> enchanceEdgesCommand;
+        public ICommand EnchanceEdgesCommand
+        {
+            get
+            {
+                if (this.enchanceEdgesCommand == null)
+                {
+                    this.enchanceEdgesCommand = new DelegateCommand<object>
+                        (this.EnchanceEdges, this.CanAlwaysPerformOperation);
+                }
+                return this.enchanceEdgesCommand;
+            }
+        }
+        //--------------------------------------------------------------------------------------------------
         private DelegateCommand<object> substractImagesCommand;
         public ICommand SubstractImagesCommand {
             get {
@@ -577,7 +578,21 @@ namespace InterferogramProcessing {
                 }
                 return this.filterImagesByStepCommand;
             }
-        }    
+        }
+        //--------------------------------------------------------------------------------------------------
+        private DelegateCommand<object> filterImagesByMedianCommand;
+        public ICommand FilterImagesByMedianCommand
+        {
+            get
+            {
+                if (this.filterImagesByMedianCommand == null)
+                {
+                    this.filterImagesByMedianCommand = new DelegateCommand<object>
+                        (this.FilterImagesByMedian, this.CanAlwaysPerformOperation);
+                }
+                return this.filterImagesByMedianCommand;
+            }
+        }
         //--------------------------------------------------------------------------------------------------
         private DelegateCommand<object> filterFourierTransformsBySelectingCommand;
         public ICommand FilterFourierTransformsBySelectingCommand {
@@ -848,6 +863,22 @@ namespace InterferogramProcessing {
             }
         }
         //--------------------------------------------------------------------------------------------------
+        private DelegateCommand<object> customNormalizeImageCommand;
+        public ICommand CustomNormalizeImageCommand
+        {
+            get
+            {
+                if (this.customNormalizeImageCommand == null)
+                {
+                    this.customNormalizeImageCommand = new DelegateCommand<object>
+                        (this.CustomNormalizeImage, this.CanAlwaysPerformOperation);
+                }
+                return this.customNormalizeImageCommand;
+            }
+        }
+
+
+        //--------------------------------------------------------------------------------------------------
         private DelegateCommand<object> generateRectanglePulsesCommand;
         public ICommand GenerateRectanglePulsesCommand {
             get {
@@ -856,20 +887,6 @@ namespace InterferogramProcessing {
                         ( this.GenerateRectanglePulses, this.CanAlwaysPerformOperation );
                 }
                 return this.generateRectanglePulsesCommand;
-            }
-        }
-        //--------------------------------------------------------------------------------------------------
-        private DelegateCommand<object> substractStraightFromGraphCommand;
-        public ICommand SubstractStraightFromGraphCommand
-        {
-            get
-            {
-                if (this.substractStraightFromGraphCommand == null)
-                {
-                    this.substractStraightFromGraphCommand = new DelegateCommand<object>
-                        (this.SubstractStraightFromGraph, this.CanAlwaysPerformOperation);
-                }
-                return this.substractStraightFromGraphCommand;
             }
         }
         //--------------------------------------------------------------------------------------------------
@@ -1118,35 +1135,6 @@ namespace InterferogramProcessing {
             UserInterfaceHelper.ShowGraph3DInWindow( pointsInfoCollection );
             */ 
              
-        }
-        //--------------------------------------------------------------------------------------------------
-        //График интенсивностей двух изображений
-        public void ShowIntensitiesGraph(object parameter)
-        {
-            string stringParameter = parameter.ToString();
-            int row = Convert.ToInt32(stringParameter);
-
-            RealMatrix[] images = this.GetSelectedGrayScaleMatrices().ToArray();
-            RealMatrix firstImage = images[0];
-            RealMatrix secondImage = images[1];
-
-            double[] intensities1 = firstImage.GetRow(row);
-            double[] intensities2 = secondImage.GetRow(row);
-                        
-            Point2D[] graphPoints = PlaneManager.CreatePoints2D(intensities1, intensities2);
-            string graphName = "Intensities";
-            System.Windows.Media.Color color = System.Windows.Media.Colors.Red;
-            bool lineVisibility = false;
-            ZedGraph.SymbolType symbolType = SymbolType.Diamond;
-            int symbolSize = 1;
-
-            ZedGraphInfo zedGraphInfo = new ZedGraphInfo
-                (graphName, color, graphPoints, lineVisibility, symbolType, symbolSize);
-            IList<ZedGraphInfo> graphInfoCollection = new List<ZedGraphInfo>() { zedGraphInfo };
-            string axisTitleX = "Int 1";
-            string axisTitleY = "Int 2";
-            AxesInfo axesInfo = new AxesInfo(axisTitleX, axisTitleY);
-            UserInterfaceHelper.ShowZedGraphInWindow(graphInfoCollection, axesInfo);
         }
         //--------------------------------------------------------------------------------------------------
         //Генерация интерферограмм
@@ -1547,7 +1535,37 @@ namespace InterferogramProcessing {
             imagesNames = ArrayOperator.AddStringToEachValue( imagesNames, " Usual Filter" );
 
             this.AddImagesToImagesList( resultImages, imagesNames, newMatrices );
-        }               
+        }
+        //--------------------------------------------------------------------------------------------------
+        //Улучшить границы
+        public void EnchanceEdges(object parameter)
+        {            
+            IList<RealMatrix> grayScaleMatrices = this.GetSelectedGrayScaleMatrices();
+
+            RealMatrix mask = MatrixHandler.GetFilteredMaskForEdgeEnhancing();
+            RealMatrix[] newMatrices = MatricesManager.FilterMatricesByMask(grayScaleMatrices.ToArray(), mask);
+
+            double originMinValue = grayScaleMatrices[0].GetMinValue();
+            double originMaxValue = grayScaleMatrices[0].GetMaxValue();
+
+            double minValue = newMatrices[0].GetMinValue();
+            double maxValue = newMatrices[0].GetMaxValue();
+
+            Interval<double> startInterval = new Interval<double>(minValue, maxValue);
+            Interval<double> finishInterval = new Interval<double>(0, 255);
+
+            newMatrices = MatricesManager.TransformMatrices(startInterval, finishInterval, newMatrices);
+
+            WriteableBitmap[] resultImages =
+                WriteableBitmapsManager.CreateGrayScaleWriteableBitmapsFromMatrices
+                (OS.IntegerSystemDpiX, OS.IntegerSystemDpiY, newMatrices);
+
+            double[] numbers = ArrayCreator.CreateLinearSeriesArray(1, 1, resultImages.Length);
+            string[] imagesNames = ExtraLibrary.Converting.ArrayConverter.ToStringArray(numbers);
+            imagesNames = ArrayOperator.AddStringToEachValue(imagesNames, "Enchance edge filter");
+
+            this.AddImagesToImagesList(resultImages, imagesNames, newMatrices);
+        }
         //--------------------------------------------------------------------------------------------------
         //Вычитание изображений
         public void SubstractImages( object parameter ) {
@@ -2023,6 +2041,31 @@ namespace InterferogramProcessing {
             imagesNames = ArrayOperator.AddStringToEachValue( imagesNames, " Filtered Image" );
 
             this.AddImagesToImagesList( resultImages, imagesNames, resultMatrices.ToArray() );
+        }
+        //--------------------------------------------------------------------------------------------------
+        //Фильтрация изображений медианным фильтром
+        public void FilterImagesByMedian(object parameter)
+        {
+            int windowSize = int.Parse((string)parameter);
+            IList<RealMatrix> grayScaleMatrices = this.GetSelectedGrayScaleMatrices();
+            MedianByRowsGrayScaleFilter medianByRowsGrayScaleFilter = new MedianByRowsGrayScaleFilter();
+
+            IList<RealMatrix> resultMatrices = new List<RealMatrix>();
+            for (int index = 0; index < grayScaleMatrices.Count; index++)
+            {
+                RealMatrix matrix = grayScaleMatrices[index];
+                RealMatrix filteredMatrix = medianByRowsGrayScaleFilter.ExecuteFiltration(matrix, windowSize);
+                resultMatrices.Add(filteredMatrix);
+            }
+
+            WriteableBitmap[] resultImages = WriteableBitmapsManager.CreateGrayScaleWriteableBitmapsFromMatrices
+                (OS.IntegerSystemDpiX, OS.IntegerSystemDpiY, resultMatrices.ToArray());
+
+            double[] numbers = ArrayCreator.CreateLinearSeriesArray(1, 1, resultImages.Length);
+            string[] imagesNames = ExtraLibrary.Converting.ArrayConverter.ToStringArray(numbers);
+            imagesNames = ArrayOperator.AddStringToEachValue(imagesNames, " Filtered Image");
+
+            this.AddImagesToImagesList(resultImages, imagesNames, resultMatrices.ToArray());
         }
         //--------------------------------------------------------------------------------------------------
         public void FilterByMaxSpectrumValue( object parameter ) {
@@ -2916,26 +2959,23 @@ namespace InterferogramProcessing {
             this.MainLeftImage = wrapper.Image;
         }
         //------------------------------------------------------------------------------------------------------
-        public void SubstractStraightFromGraph(object parameter)
+        public void CustomNormalizeImage( object parameter )
         {
-            GraphInfo graph = this.GraphInfoCollection.FirstOrDefault();
-            if (graph != null)
-            {
-                Point2D lastPoint = graph.GraphPoints.LastOrDefault();
-                double k = lastPoint.Y / lastPoint.X;
+            WriteableBitmap image = this.MainLeftImage as WriteableBitmap;
+            
+            WriteableBitmapWrapper wrapper = WriteableBitmapWrapper.Create(image);
+            RealMatrix matrix = wrapper.GetGrayScaleMatrix();
 
-                Point2D[] newPoints = new Point2D[graph.GraphPoints.Length];
-                for (int j = 0; j < graph.GraphPoints.Length; j++)
-                {
-                    Point2D point = graph.GraphPoints[j];
-                    newPoints[j] = new Point2D(point.X, point.Y - k * point.X);
-                }
+            Interval<double> startInterval = new Interval<double>(0, 255.0);
+            Interval<double> finishInterval = new Interval<double>(0, 255.0 * 167.0 / 211.0);
+            RealIntervalTransform transform = new RealIntervalTransform(startInterval, finishInterval);
 
-                graph.GraphPoints = newPoints;
-                this.GraphInfoCollection = new List<GraphInfo>() { graph };
-            }
+            RealMatrix resMatrix = RealMatrixValuesTransform.TransformMatrixValues(matrix, transform);
+            WriteableBitmap resImage = WriteableBitmapCreator.CreateGrayScaleWriteableBitmapFromMatrix(resMatrix, OS.IntegerSystemDpiX, OS.IntegerSystemDpiY);
+
+            this.MainRightImage = resImage;
         }
-        //------------------------------------------------------------------------------------------------------        
+
         public BitmapSource MainLeftImage {
             get {
                 return this.mainLeftImage;

@@ -147,6 +147,7 @@
     <Compile Include="ImageProcessing\Raw\SosHeader.cs" />
     <Compile Include="ImageProcessing\Raw\SosHeaderComponentinfo.cs" />
     <Compile Include="ImageProcessing\Raw\TagType.cs" />
+    <Compile Include="ImageProcessing\MedianByRowsGrayScaleFilter.cs" />
     <Compile Include="ImageProcessing\SimpleGrayScaleFilter.cs" />
     <Compile Include="ImageProcessing\WriteableBitmapOperation\WriteableBitmapWrapperGray16.cs" />
     <Compile Include="ImageProcessing\WriteableBitmapOperation\WriteableBitmapWrapperRGB48.cs" />
