@@ -170,6 +170,7 @@
     <Compile Include="Mathematics\Approximation\QuadricCurveApproximation\EllipseApproximator\CoefficientSquareXComputing.cs" />
     <Compile Include="Mathematics\Approximation\QuadricCurveApproximation\EllipseApproximator\CoefficientXComputing.cs" />
     <Compile Include="Mathematics\ComplexNumber.cs" />
+    <Compile Include="Mathematics\DecimalComplex.cs" />
     <Compile Include="Mathematics\EquationsSets\LinearSystem.cs" />
     <Compile Include="Mathematics\EquationsSets\Equations\ComplexQuadraticEquation.cs" />
     <Compile Include="Mathematics\EquationsSets\Equations\ComplexRootException.cs" />

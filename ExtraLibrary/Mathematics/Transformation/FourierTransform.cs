@@ -17,7 +17,48 @@ namespace ExtraLibrary.Mathematics.Transformation {
         public FourierTransform() {
 
         }
+
         //----------------------------------------------------------------------------------------------
+        public Complex[] GetFourierTransform(Complex[] src)
+        {
+            int count = src.Length;
+            Complex[] res = new Complex[count];
+            for (int k = 0; k < count; k++)
+            {
+                res[k] = new Complex(0, 0);
+                for (int n = 0; n < count; n++)
+                {
+                    Complex temp = Complex.FromPolarCoordinates(1, -2 * Math.PI * n * k / count);
+                    temp *= src[n];
+                    res[k] += temp;
+                }
+            }
+            return res;
+        }
+        //----------------------------------------------------------------------------------------------
+        /*
+        public Complex[] GetFourierTransform(Complex[] srcValues)
+        {
+            int m = srcValues.Length;
+            Complex[] res = new Complex[srcValues.Length];
+
+            for (int i = 0; i < srcValues.Length; i++)
+            {
+                double frequencyValue = i;
+                double realSum = 0;
+                double imaginarySum = 0;
+                for (int j = 0; j < srcValues.Length; j++)
+                {
+                    double argValue = j;
+                    Complex p = srcValues[j];
+                    double phase = 2 * Math.PI * i * j / m;
+
+                    realSum += i * Math.Cos(phase);
+                    imaginarySum -= srcValues[j] * Math.Sin(phase);
+                }
+            }
+        }
+        */
         //----------------------------------------------------------------------------------------------
         //Преобразование Фурье
         public Complex[] GetFourierTransform(

@@ -1900,8 +1900,12 @@ namespace InterferogramProcessing {
 
             FourierTransform fourierTransform = new FourierTransform();
 
-            Complex[] resultValues =
-                fourierTransform.GetCenteredFourierTransform( argumentValues, functionValues, frequencyValues );
+            //Complex[] resultValues =
+            //    fourierTransform.GetCenteredFourierTransform( argumentValues, functionValues, frequencyValues );
+
+            Complex[] resultValues = fourierTransform.GetFourierTransform(NumbersManager.CreateComplexNumbers(functionValues));
+            
+
             this.fourierTransformValuesForGraph = resultValues;
             
             double[] spectrumValues = fourierTransform.GetFourierTransformSpectrum( resultValues );
