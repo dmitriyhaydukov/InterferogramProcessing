@@ -58,14 +58,22 @@ namespace ExtraControls
             {
                 for (int m2 = 0; m2 < table.M2; m2++)
                 {
+                    Border b = new Border();
+                    b.BorderThickness = new Thickness(1);
+                    b.BorderBrush = Brushes.Black;
+                    Grid.SetRow(b, m1);
+                    Grid.SetColumn(b, m2);
+
                     TextBlock tb = new TextBlock();
                     tb.Text = table.Table[m1, m2].ToString();
                     tb.HorizontalAlignment = HorizontalAlignment.Center;
                     tb.VerticalAlignment = VerticalAlignment.Center;
-                    tb.Margin = new Thickness(5);
-                    Grid.SetRow(tb, m1);
-                    Grid.SetColumn(tb, m2);
-                    this.mainGrid.Children.Add(tb);
+                    //tb.Margin = new Thickness(5);
+                    tb.Padding = new Thickness(5);
+                    //Grid.SetRow(tb, m1);
+                    //Grid.SetColumn(tb, m2);
+                    b.Child = tb;
+                    this.mainGrid.Children.Add(b);
                 }
             }
 

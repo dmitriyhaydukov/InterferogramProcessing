@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <Grid x:Name="mainGrid" ShowGridLines="True">
+    <Grid x:Name="mainGrid" ShowGridLines="False" Margin="10">
     </Grid>
     
 </UserControl>
