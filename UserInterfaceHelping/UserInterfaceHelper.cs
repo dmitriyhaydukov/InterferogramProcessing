@@ -40,19 +40,32 @@ namespace UserInterfaceHelping {
         }
         //---------------------------------------------------------------------------------------------------------
         //Отображение 3D-графика в окне
-        public static void ShowGraph3DInWindow( IList<HelixPointsInfo> pointsInfoCollection ) {
+        public static void ShowGraph3DInWindow( IList<HelixPointsInfo> pointsInfoCollection, IList<HelixGridLinesInfo> gridLinesInfoCollection) {
             HelixGraph3DWindow helixGraph3DWindow = new HelixGraph3DWindow();
-
-            for ( int index = 0; index < pointsInfoCollection.Count; index++ ) {
-                HelixPointsInfo pointsInfo = pointsInfoCollection[ index ];
-                helixGraph3DWindow.AddPointsInfo( pointsInfo );
+                       
+            for (int index = 0; index < pointsInfoCollection.Count; index++)
+            {
+                HelixPointsInfo pointsInfo = pointsInfoCollection[index];
+                helixGraph3DWindow.AddPointsInfo(pointsInfo);
             }
-                        
+            //helixGraph3DWindow.ExecuteAutotuning();
+            
+            if (gridLinesInfoCollection != null)
+            {
+                for (int index = 0; index < gridLinesInfoCollection.Count; index++)
+                {
+                    HelixGridLinesInfo gridLinesInfo = gridLinesInfoCollection[index];
+                    helixGraph3DWindow.AddGridLinesInfo(gridLinesInfo);
+                }
+            }
+
             helixGraph3DWindow.ExecuteAutotuning();
+
             helixGraph3DWindow.Show();
             helixGraph3DWindow.Activate();
         }
         //---------------------------------------------------------------------------------------------------------
+        /*
         public static void ShowGraph3DInWindow(
             IList<HelixPointsInfo> pointsInfoCollection,
             IList<HelixGridLinesInfo> gridLinesInfoCollection
@@ -73,6 +86,7 @@ namespace UserInterfaceHelping {
             helixGraph3DWindow.Show();
             helixGraph3DWindow.Activate();
         }
+        */
         //---------------------------------------------------------------------------------------------------------
         public static void ShowPairGraph3DInWindow(
             IList<HelixPointsInfo> pointsInfoCollectionOne,

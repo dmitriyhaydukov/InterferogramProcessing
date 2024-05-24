@@ -25,10 +25,17 @@ namespace ExtraControls {
             set;
         }
         //------------------------------------------------------------------------------------------------
-        public HelixPointsInfo( Point3D[] points, Color pointsColor, double pointsSize ) {
+        public bool ConnectByLines
+        {
+            get;
+            set;
+        }
+        //------------------------------------------------------------------------------------------------
+        public HelixPointsInfo( Point3D[] points, Color pointsColor, double pointsSize, bool connectByLines ) {
             this.Points = points;
             this.PointsColor = pointsColor;
             this.PointsSize = pointsSize;
+            this.ConnectByLines = connectByLines; 
         }
         //------------------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------------------

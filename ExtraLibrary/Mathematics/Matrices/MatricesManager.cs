@@ -191,6 +191,48 @@ namespace ExtraLibrary.Mathematics.Matrices {
             return newMatrices;
         }
         //-----------------------------------------------------------------------------------------------------
+        public static RealMatrix MergeMatrices(IList<RealMatrix> matrices, int n)
+        {
+            RealMatrix firstMatrix = matrices.FirstOrDefault();
+            if (firstMatrix == null)
+            {
+                return null;
+            }
+
+            int rowCount = firstMatrix.RowCount;
+            int columnCount = firstMatrix.ColumnCount;
+
+            int resRowCount = rowCount * n;
+            int resColumnCount = columnCount * n;
+
+            int currentMatrixIndex = 0;
+
+            RealMatrix resMatrix = new RealMatrix(resRowCount, resColumnCount);
+                                             
+            for (int offsetByColumn = 0; offsetByColumn < n; offsetByColumn++)
+            {
+                for (int offsetByRow = 0; offsetByRow < n; offsetByRow++)
+                {
+                    currentMatrixIndex = offsetByColumn * n + offsetByRow;
+
+                    for (int row = 0; row < rowCount; row++)
+                    {
+                        for (int column = 0; column < columnCount; column++)
+                        {
+                            //int resRow = offsetByRow + row * n;
+                            //int resColumn = offsetByColumn +  column * n;
+
+                            int resRow = offsetByColumn + row * n;
+                            int resColumn = offsetByRow + column * n;
+                            
+                            resMatrix[resRow, resColumn] = matrices[currentMatrixIndex][row, column];
+                        }
+                    }
+                }
+            }
+
+            return resMatrix;
+        }
         //-----------------------------------------------------------------------------------------------------
         //-----------------------------------------------------------------------------------------------------
     }

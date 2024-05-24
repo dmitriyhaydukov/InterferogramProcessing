@@ -41,6 +41,13 @@ namespace UserInterfaceHelping {
             this.helixGraph3DControl.AddPointsInfo( pointsInfo );
         }
         //--------------------------------------------------------------------------------------------------
+        /*
+        public void AddPointsConnectedWithLinesInfo(HelixPointsInfo pointsInfo)
+        {
+            this.helixGraph3DControl.AddPointsConnectedWithLinesInfo(pointsInfo);
+        }
+        */
+        //--------------------------------------------------------------------------------------------------
         public void AddGridLinesInfo( HelixGridLinesInfo gridLinesInfo ) {
             this.helixGraph3DControl.AddGridLinesInfo( gridLinesInfo );
         }

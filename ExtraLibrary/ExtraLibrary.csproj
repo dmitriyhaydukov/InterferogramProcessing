@@ -180,6 +180,8 @@
     <Compile Include="Mathematics\EquationsSets\Equations\VietoKardanoSolver.cs" />
     <Compile Include="Mathematics\Matrices\ComplexMatrix.cs" />
     <Compile Include="Mathematics\Matrices\IntegerMatrix.cs" />
+    <Compile Include="Mathematics\ModularArithmetic\ModularArithmeticHelper.cs" />
+    <Compile Include="Mathematics\ModularArithmetic\ModularArithmeticTable.cs" />
     <Compile Include="Mathematics\Transformation\FastFourierTransform.cs" />
     <Compile Include="Mathematics\Filtering\FourierFilter.cs" />
     <Compile Include="Mathematics\Transformation\FastFourierTransformManager.cs" />
@@ -223,6 +225,7 @@
       <Name>EDSDKLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\Solutions\InterferogramProcessing\packages\Magick.NET-Q16-x86.7.0.3.500\build\net40-client\Magick.NET-Q16-x86.targets" Condition="Exists('..\..\..\Solutions\InterferogramProcessing\packages\Magick.NET-Q16-x86.7.0.3.500\build\net40-client\Magick.NET-Q16-x86.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

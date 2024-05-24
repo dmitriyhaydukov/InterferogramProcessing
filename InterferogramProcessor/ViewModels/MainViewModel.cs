@@ -37,6 +37,7 @@ using ExtraLibrary.Geometry2D;
 using ExtraLibrary.Geometry3D;
 using ExtraLibrary.Collections;
 using ExtraLibrary.Algorithms;
+using ExtraLibrary.Mathematics.ModularArithmetic;
 
 using Interferometry.InterferogramProcessing;
 using Interferometry.InterferogramCreation;
@@ -300,6 +301,35 @@ namespace InterferogramProcessing {
             }
         }
         //--------------------------------------------------------------------------------------------------
+        //ShowModularAriphmeticModelInSpace
+        private DelegateCommand<object> showModularAriphmeticModelInSpaceCommand;
+        public ICommand ShowModularAriphmeticModelInSpaceCommand
+        {
+            get
+            {
+                if (this.showModularAriphmeticModelInSpaceCommand == null)
+                {
+                    this.showModularAriphmeticModelInSpaceCommand = new DelegateCommand<object>
+                        (this.ShowModularAriphmeticModelInSpace, this.CanAlwaysPerformOperation);
+                }
+                return this.showModularAriphmeticModelInSpaceCommand;
+            }
+        }
+        //--------------------------------------------------------------------------------------------------
+        private DelegateCommand<object> showModularArithmeticTableCommand;
+        public ICommand ShowModularArithmeticTableCommand
+        {
+            get
+            {
+                if (this.showModularArithmeticTableCommand == null)
+                {
+                    this.showModularArithmeticTableCommand = new DelegateCommand<object>
+                        (this.ShowModularArithmeticTable, this.CanAlwaysPerformOperation);
+                }
+                return this.showModularArithmeticTableCommand;
+            }
+        }
+        //--------------------------------------------------------------------------------------------------
         private DelegateCommand<object> transformImagesToGrayScaleImagesCommand;
         public ICommand TransformImagesToGrayScaleImagesCommand {
             get {
@@ -319,6 +349,20 @@ namespace InterferogramProcessing {
                         ( this.NormalizeImages, this.CanAlwaysPerformOperation );
                 }
                 return this.normalizeImagesCommand;
+            }
+        }
+        //--------------------------------------------------------------------------------------------------
+        private DelegateCommand<object> mergeImagesCommand;
+        public ICommand MergeImagesCommand
+        {
+            get
+            {
+                if (this.mergeImagesCommand == null)
+                {
+                    this.mergeImagesCommand = new DelegateCommand<object>
+                        (this.MergeImages, this.CanAlwaysPerformOperation);
+                }
+                return this.mergeImagesCommand;
             }
         }
         //--------------------------------------------------------------------------------------------------
@@ -948,6 +992,19 @@ namespace InterferogramProcessing {
             this.AddImagesToImagesList( resultImages, imagesNames, resultImagesMatrices );
         }
         //--------------------------------------------------------------------------------------------------
+        public void MergeImages(object parameter)
+        {
+            int n = Convert.ToInt32(parameter.ToString());
+                        
+            IList<RealMatrix> selectedGrayScaleMatrices = this.GetSelectedGrayScaleMatrices();
+            RealMatrix resMatrix = MatricesManager.MergeMatrices(selectedGrayScaleMatrices, n);
+
+            WriteableBitmap resImage = WriteableBitmapCreator.CreateGrayScaleWriteableBitmapFromMatrix(resMatrix, OS.IntegerSystemDpiX, OS.IntegerSystemDpiY);
+
+            this.MainRightImage = resImage;
+            
+        }
+        //--------------------------------------------------------------------------------------------------
         //Изображение с камеры
         public void GetImageFromCamera( object parameter ) {
             
@@ -1260,11 +1317,11 @@ namespace InterferogramProcessing {
             double pointsSize = 3;
             double midPointSize = 5;
 
-            HelixPointsInfo pointsInfo = new HelixPointsInfo( filteredPoints, Colors.Red, pointsSize );
+            HelixPointsInfo pointsInfo = new HelixPointsInfo( filteredPoints, Colors.Red, pointsSize, false );
             HelixPointsInfo midPointInfo =
-                new HelixPointsInfo( new ExtraLibrary.Geometry3D.Point3D[] { midPoint }, Colors.Green, midPointSize );
+                new HelixPointsInfo( new ExtraLibrary.Geometry3D.Point3D[] { midPoint }, Colors.Green, midPointSize, false );
             IList<HelixPointsInfo> pointsInfoCollection = new List<HelixPointsInfo>() { pointsInfo, midPointInfo };
-            UserInterfaceHelper.ShowGraph3DInWindow( pointsInfoCollection );
+            UserInterfaceHelper.ShowGraph3DInWindow( pointsInfoCollection, null );
         }
         //-------------------------------------------------------------------------------------------------------------
         //Траектория интенсивностей с аппроксимирующей плоскостью
@@ -1294,9 +1351,9 @@ namespace InterferogramProcessing {
             double pointsSize = 3;
             double midPointSize = 5;
 
-            HelixPointsInfo pointsInfo = new HelixPointsInfo( filteredPoints, Colors.Red, pointsSize );
+            HelixPointsInfo pointsInfo = new HelixPointsInfo( filteredPoints, Colors.Red, pointsSize, false );
             HelixPointsInfo midPointInfo =
-                new HelixPointsInfo( new ExtraLibrary.Geometry3D.Point3D[] { midPoint }, Colors.Green, midPointSize );
+                new HelixPointsInfo( new ExtraLibrary.Geometry3D.Point3D[] { midPoint }, Colors.Green, midPointSize, false );
 
             HelixGridLinesInfo gridLinesInfo = new HelixGridLinesInfo() {
                 Center = midPoint,
@@ -1338,20 +1395,170 @@ namespace InterferogramProcessing {
             double pointsSize = 3;
             double midPointSize = 5;
 
-            HelixPointsInfo pointsInfo = new HelixPointsInfo( points, Colors.Red, pointsSize );
+            HelixPointsInfo pointsInfo = new HelixPointsInfo( points, Colors.Red, pointsSize, false );
             HelixPointsInfo midPointInfo =
-                new HelixPointsInfo( new ExtraLibrary.Geometry3D.Point3D[] { midPoint }, Colors.Green, midPointSize );
+                new HelixPointsInfo( new ExtraLibrary.Geometry3D.Point3D[] { midPoint }, Colors.Green, midPointSize, false );
             IList<HelixPointsInfo> pointsInfoCollection = new List<HelixPointsInfo>() { pointsInfo, midPointInfo };
-            UserInterfaceHelper.ShowGraph3DInWindow( pointsInfoCollection );
+            UserInterfaceHelper.ShowGraph3DInWindow( pointsInfoCollection, null );
         }
+        //------------------------------------------------------------------------------------------------------------
+        public void ShowModularArithmeticTable(object parameter)
+        {
+            ModularArithmeticTable table = new ModularArithmeticTable(137, 157);
+            ModularArithmeticWindow window = new ModularArithmeticWindow();
+
+            window.UpdateTable(table);
+            window.Show();
+        }
+        //------------------------------------------------------------------------------------------------------------
+        public void ShowModularAriphmeticModelInSpace(object parameter) {
+
+            //int m1 = 137;
+            //int m2 = 157;
+            //int m3 = 197;
+
+            //int m1 = 37;
+            //int m2 = 73;
+            //int m3 = 59;
+
+            int m1 = 19;
+            int m2 = 23;
+            int m3 = 29;
+
+            int maxValue = m1 * m2 * m3;
+            int rangeValue = 100;
+
+            int M1 = ModularArithmeticHelper.CalculateM1(m1, m2, m3);
+            int M2 = ModularArithmeticHelper.CalculateM2(m1, m2, m3);
+            int M3 = ModularArithmeticHelper.CalculateM3(m1, m2, m3);
+
+            int N1 = ModularArithmeticHelper.CalculateN(M1, m1);
+            int N2 = ModularArithmeticHelper.CalculateN(M2, m2);
+            int N3 = ModularArithmeticHelper.CalculateN(M3, m3);
+                        
+            Dictionary<int, ExtraLibrary.Geometry3D.Point3D> pointsDictionary = new Dictionary<int, ExtraLibrary.Geometry3D.Point3D>();
+            List<ExtraLibrary.Geometry3D.Point3D> markedPoints = new List<ExtraLibrary.Geometry3D.Point3D>();
+
+            for (int b1 = 0; b1 < m1; b1++)
+            {
+                for (int b2 = 0; b2 < m2; b2++)
+                {
+                    for (int b3 = 0; b3 < m3; b3++)
+                    {
+                        int value = ModularArithmeticHelper.GetValue(M1, N1, M2, N2, M3, N3, m1, m2, m3, b1, b2, b3);
+                        if (value < rangeValue)
+                        {
+                            pointsDictionary.Add(value, new ExtraLibrary.Geometry3D.Point3D(b1, b2, b3));
+
+                            bool isMarkedPoint = IsMarkedPoint(b1, b2, b3, m1, m2, m3);
+                            if (isMarkedPoint)
+                            {
+                                markedPoints.Add(new ExtraLibrary.Geometry3D.Point3D(b1, b2, b3));
+                            }
+                        }
+                    }
+                }
+            }
+
+            //ExtraLibrary.Geometry3D.Point3D[] points = pointsList.ToArray();
+            ExtraLibrary.Geometry3D.Point3D[] points = pointsDictionary.OrderBy(x => x.Key).Select(x => x.Value).ToArray();
+            var tuple = ProcessPoints(points, m1, m2, m3);
+
+            double pointsSize = 3;
+            HelixPointsInfo pointsInfo = new HelixPointsInfo(tuple.Item1, Colors.Red, pointsSize, true);
+            HelixPointsInfo pointsInfo2 = new HelixPointsInfo(tuple.Item2, Colors.LightPink, pointsSize, true);
+            HelixPointsInfo pointsInfo3 = new HelixPointsInfo(markedPoints.ToArray(), Colors.Green, 5, false);
+            //HelixPointsInfo pointsInfo2 = new HelixPointsInfo(points.Take(40).ToArray(), Colors.Green, 5, false);
+
+            IList<HelixPointsInfo> pointsInfoCollection = new List<HelixPointsInfo>() { pointsInfo, pointsInfo2, pointsInfo3 };
+            
+            /*
+            PlaneDescriptor planeDescriptor = new PlaneDescriptor(50, 0, 0, 0);
+            HelixGridLinesInfo gridLinesInfo = new HelixGridLinesInfo()
+            {
+                Center = new ExtraLibrary.Geometry3D.Point3D(0, 0, 0),
+                LengthDirection = planeDescriptor.GetVectorInPlane(),
+                Normal = planeDescriptor.GetNormalVector(),
+                Length = 60,
+                Width = 60,
+                MajorDistance = 0,
+                MinorDistance = 5,
+                Thickness = 5
+            };
+                       
+            IList<HelixGridLinesInfo> gridLinesInfoCollection = new List<HelixGridLinesInfo>() { gridLinesInfo };
+            */
+
+            UserInterfaceHelper.ShowGraph3DInWindow(pointsInfoCollection, null);
+        }
+        //------------------------------------------------------------------------------------------------------------
+        private bool IsMarkedPoint(int b1, int b2, int b3, int m1, int m2, int m3)
+        {
+            bool isMarkedPoint =
+                (b1 == 0) ||
+                (b2 == 0) ||
+                (b3 == 0) ||
+                (b1 == m1 - 1) ||
+                (b2 == m2 - 1) ||
+                (b3 == m3 - 1);
+
+            return isMarkedPoint;
+        }
+        //------------------------------------------------------------------------------------------------------------
+        private bool IsJumpPoint(ExtraLibrary.Geometry3D.Point3D point, int m1, int m2, int m3)
+        {
+            bool isJumpPoint =
+                (point.X == 0) ||
+                (point.Y == 0) ||
+                (point.Z == 0) ||
+                (point.X == m1 - 1) ||
+                (point.Y == m2 - 1) ||
+                (point.Z == m3 - 1);
+            return isJumpPoint;
+        }
+        //------------------------------------------------------------------------------------------------------------
+        private Tuple<ExtraLibrary.Geometry3D.Point3D[], ExtraLibrary.Geometry3D.Point3D[]> ProcessPoints(
+            ExtraLibrary.Geometry3D.Point3D[] points, int m1, int m2, int m3
+        )
+        {
+            List<ExtraLibrary.Geometry3D.Point3D> list = new List<ExtraLibrary.Geometry3D.Point3D>();
+            List<ExtraLibrary.Geometry3D.Point3D> jumpList = new List<ExtraLibrary.Geometry3D.Point3D>();
+
+            for (int i = 0; i < points.Length - 1; i++)
+            {
+                ExtraLibrary.Geometry3D.Point3D point = points[i];
+                ExtraLibrary.Geometry3D.Point3D nextPoint = points[i + 1];
+
+                if (IsJumpPoint(point, m1, m2, m3) && IsJumpPoint(nextPoint, m1, m2, m3))
+                {
+                    ExtraLibrary.Geometry3D.Point3D point1 = new ExtraLibrary.Geometry3D.Point3D(point.X, point.Y, point.Z);
+                    ExtraLibrary.Geometry3D.Point3D point2 = new ExtraLibrary.Geometry3D.Point3D(nextPoint.X, nextPoint.Y, nextPoint.Z);
+
+                    jumpList.Add(point1);
+                    jumpList.Add(point2);
+                }
+                else
+                {
+                    ExtraLibrary.Geometry3D.Point3D point1 = new ExtraLibrary.Geometry3D.Point3D(point.X, point.Y, point.Z);
+                    ExtraLibrary.Geometry3D.Point3D point2 = new ExtraLibrary.Geometry3D.Point3D(nextPoint.X, nextPoint.Y, nextPoint.Z);
+
+                    list.Add(point1);
+                    list.Add(point2);
+                }       
+            }
+            
+            Tuple<ExtraLibrary.Geometry3D.Point3D[], ExtraLibrary.Geometry3D.Point3D[]> tuple = 
+                Tuple.Create<ExtraLibrary.Geometry3D.Point3D[], ExtraLibrary.Geometry3D.Point3D[]>(list.ToArray(), jumpList.ToArray());
+            return tuple;
+        }       
         //------------------------------------------------------------------------------------------------------------
         public void ShowPairLastPointsInSpace( object parameter ) {
             double pointsSize = 3;
             
             HelixPointsInfo pointsInfoOne = 
-                new HelixPointsInfo( lastSpatialPoints.GetItem( 0 ), Colors.Red, pointsSize );
+                new HelixPointsInfo( lastSpatialPoints.GetItem( 0 ), Colors.Red, pointsSize, false );
             HelixPointsInfo pointsInfoTwo =
-                new HelixPointsInfo( lastSpatialPoints.GetItem( 1 ), Colors.Red, pointsSize );
+                new HelixPointsInfo( lastSpatialPoints.GetItem( 1 ), Colors.Red, pointsSize, false );
 
             IList<HelixPointsInfo> pointsInfoCollectionOne = new List<HelixPointsInfo>() { pointsInfoOne };
             IList<HelixPointsInfo> pointsInfoCollectionTwo = new List<HelixPointsInfo>() { pointsInfoTwo };
@@ -1408,7 +1615,7 @@ namespace InterferogramProcessing {
             //    SpaceManager.GetPointsByMultipleIndex( decodingManager.CylinderCirclePoints, multipleValue );
 
             HelixPointsInfo trajectoryPointsInfo =
-                new HelixPointsInfo( trajectoryPoints, Colors.Blue, pointsSize );
+                new HelixPointsInfo( trajectoryPoints, Colors.Blue, pointsSize, false );
             //HelixPointsInfo circlePontsInfo =
             //    new HelixPointsInfo( circlePoints, Colors.Red, pointsSize );
 
@@ -1437,7 +1644,7 @@ namespace InterferogramProcessing {
             //IList<HelixGridLinesInfo> gridLinesInfoCollection = new List<HelixGridLinesInfo>() { gridLinesInfo };
             
             //UserInterfaceHelper.ShowGraph3DInWindow( pointsInfoCollection, gridLinesInfoCollection );
-            UserInterfaceHelper.ShowGraph3DInWindow( pointsInfoCollection );
+            UserInterfaceHelper.ShowGraph3DInWindow( pointsInfoCollection, null );
 
             double maxX = PlaneManager.GetCoordinatesX( this.decodingManager.PlaneXyPoints ).Max() + 50;
             double maxY = PlaneManager.GetCoordinatesY( this.decodingManager.PlaneXyPoints ).Max() + 50;
@@ -1467,10 +1674,6 @@ namespace InterferogramProcessing {
             List<ZedGraphInfo> zedInfo = new List<ZedGraphInfo>() { zedGraphInfo3, zedGraphInfo2, zedGraphInfo1 };
 
             UserInterfaceHelper.ShowZedGraphInWindow( zedInfo, axesInfo );
-
-
-
-
         }
         //--------------------------------------------------------------------------------------------------
         public void GetFelteredAverageIntensitiesInterferograms( object parameter ) {
@@ -2574,7 +2777,7 @@ namespace InterferogramProcessing {
                 Thickness = 1
             };
 
-            HelixPointsInfo pointsInfo = new HelixPointsInfo( points, Colors.Red, 6 );
+            HelixPointsInfo pointsInfo = new HelixPointsInfo( points, Colors.Red, 6, false );
             HelixGraph3DControl control = new HelixGraph3DControl();
             control.AddPointsInfo( pointsInfo );
             control.AddGridLinesInfo( gridLinesInfo );

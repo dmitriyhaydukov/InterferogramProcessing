@@ -39,11 +39,11 @@ namespace ExtraLibrary.Mathematics.Transformation {
         public ComplexMatrix GetCenteredFourierTransform2D( RealMatrix matrix ) {
             
             RealMatrix newMatrix = this.GetMatrixForCenteredFourierTransform( matrix );
-            ComplexMatrix resultMatrix = this.GetFourierTransform2D( newMatrix );
+            //ComplexMatrix resultMatrix = this.GetFourierTransform2D( newMatrix );
             
             //ComplexMatrix resultMatrix = this.GetCudaFourierTransform2D(matrix);
 
-            //ComplexMatrix resultMatrix = this.GetCudaFourierTransform2D(newMatrix);
+            ComplexMatrix resultMatrix = this.GetCudaFourierTransform2D(newMatrix);
             
             return resultMatrix;
         }

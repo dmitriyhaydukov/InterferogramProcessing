@@ -39,6 +39,10 @@
                         <MenuItem Header="График последней автоматической гамма-коррекции" Command="{Binding Path=ShowAutoGammaCorrectionGraphCommand}" Visibility="Collapsed"></MenuItem>
                         <MenuItem Header="Преобразовать в полутоновые изображения" Command="{Binding Path=TransformImagesToGrayScaleImagesCommand}"></MenuItem>
                         <MenuItem Header="Нормализовать изображения" Command="{Binding Path=NormalizeImagesCommand}"></MenuItem>
+                        <MenuItem Header="Объеденить изображения" 
+                                  Command="{Binding Path=MergeImagesCommand}"
+                                  CommandParameter="{Binding ElementName=windowSizeTextBox, Path=Text}">
+                        </MenuItem>
                         
                         <MenuItem Header="Фильтровать интерференционные картины по средней интенсивности" Visibility="Collapsed"
                                   Command="{Binding Path=GetFelteredAverageIntensitiesInterferogramsCommand}"
@@ -224,6 +228,11 @@
 
                     </MenuItem>
                     <MenuItem Header="Трехмерный график">
+
+                        <MenuItem Header="Таблица решений" Command="{Binding Path=ShowModularArithmeticTableCommand}"></MenuItem>
+
+                        <MenuItem Header="Модульная арфметика" Command="{Binding Path=ShowModularAriphmeticModelInSpaceCommand}"></MenuItem>
+                        
                         <MenuItem Header="Отобразить траекторию интенсивностей в пространстве" Command="{Binding Path=ShowIntensitiesTrajectoryInSpaceCommand}"></MenuItem>
 
                         <MenuItem Header="Отобразить траекторию интенсивностей в пространстве с аппроксимирующей плоскостью"

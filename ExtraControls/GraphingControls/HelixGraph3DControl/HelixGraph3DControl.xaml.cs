@@ -27,6 +27,7 @@ namespace ExtraControls {
 
         //-----------------------------------------------------------------------------------------------------------
         private Dictionary<HelixPointsInfo, PointsVisual3D> pointsInfoDictionary;
+        private Dictionary<HelixPointsInfo, LinesVisual3D> linesInfoDictionary;
         private Dictionary<HelixGridLinesInfo, GridLinesVisual3D> gridLinesInfoDictionary;
         //-----------------------------------------------------------------------------------------------------------
         public HelixGraph3DControl() {
@@ -37,6 +38,7 @@ namespace ExtraControls {
         //-----------------------------------------------------------------------------------------------------------
         public void InitalizeControl() {
             this.pointsInfoDictionary = new Dictionary<HelixPointsInfo, PointsVisual3D>();
+            this.linesInfoDictionary = new Dictionary<HelixPointsInfo, LinesVisual3D>();
             this.gridLinesInfoDictionary = new Dictionary<HelixGridLinesInfo, GridLinesVisual3D>();
         }
         //-----------------------------------------------------------------------------------------------------------
@@ -52,14 +54,40 @@ namespace ExtraControls {
         //-----------------------------------------------------------------------------------------------------------
         //-----------------------------------------------------------------------------------------------------------
         public void AddPointsInfo( HelixPointsInfo pointsInfo ) {
-            PointsVisual3D pointsVisual3D = new PointsVisual3D();
-            pointsVisual3D.Points = HelixGraph3DControl.ConvertPoints( pointsInfo.Points );
-            pointsVisual3D.Size = pointsInfo.PointsSize;
-            pointsVisual3D.Color = pointsInfo.PointsColor;
-            helixViewPort3D.Children.Add( pointsVisual3D );
 
-            this.pointsInfoDictionary.Add( pointsInfo, pointsVisual3D );
+            if (pointsInfo.ConnectByLines)
+            {
+                LinesVisual3D linesVisual3D = new LinesVisual3D();
+                linesVisual3D.Points = HelixGraph3DControl.ConvertPoints(pointsInfo.Points);
+                linesVisual3D.Thickness = 3;
+                linesVisual3D.Color = pointsInfo.PointsColor;
+                helixViewPort3D.Children.Add(linesVisual3D);
+                this.linesInfoDictionary.Add(pointsInfo, linesVisual3D);
+            }
+            else
+            {
+                PointsVisual3D pointsVisual3D = new PointsVisual3D();
+                pointsVisual3D.Points = HelixGraph3DControl.ConvertPoints(pointsInfo.Points);
+                pointsVisual3D.Size = pointsInfo.PointsSize;
+                pointsVisual3D.Color = pointsInfo.PointsColor;
+                helixViewPort3D.Children.Add(pointsVisual3D);
+                this.pointsInfoDictionary.Add(pointsInfo, pointsVisual3D);
+            }
         }
+        //-----------------------------------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------------------
+        /*
+        public void AddPointsConnectedWithLinesInfo(HelixPointsInfo pointsInfo)
+        {
+            LinesVisual3D linesVisual3D = new LinesVisual3D();
+            linesVisual3D.Points = HelixGraph3DControl.ConvertPoints(pointsInfo.Points);
+            linesVisual3D.Thickness = 3;
+            linesVisual3D.Color = pointsInfo.PointsColor;
+            helixViewPort3D.Children.Add(linesVisual3D);
+
+            this.linesInfoDictionary.Add(pointsInfo, linesVisual3D);
+        }
+        */
         //-----------------------------------------------------------------------------------------------------------
         public void RemovePointsInfo( HelixPointsInfo pointsInfo ) {
             PointsVisual3D pointsVisual3D = this.pointsInfoDictionary[ pointsInfo ];
@@ -121,8 +149,8 @@ namespace ExtraControls {
             double mainMinX = 0, mainMinY = 0, mainMinZ = 0;
             double mainMaxX = 0, mainMaxY = 0, mainMaxZ = 0;
             
-            for ( int index = 0; index < this.pointsInfoDictionary.Count; index++ ) {
-                HelixPointsInfo pointsInfo = this.pointsInfoDictionary.Keys.Skip( index ).First();
+            for ( int index = 0; index < this.linesInfoDictionary.Count; index++ ) {
+                HelixPointsInfo pointsInfo = this.linesInfoDictionary.Keys.Skip( index ).First();
                 double[] minimalCoordinates = SpaceManager.GetMinimalCoordinates( pointsInfo.Points );
                 double[] maximalCoordinates = SpaceManager.GetMaximalCoordinates( pointsInfo.Points );
 
